@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { emailValidator } from '../core/utils';
+import { usernameValidator } from '../core/utils';
 import Background from '../components/Background';
 import BackButton from '../components/BackButton';
 import Logo from '../components/Logo';
@@ -10,22 +10,22 @@ import { theme } from '../core/theme';
 import Button from '../components/Button';
 
 const ForgotPasswordScreen = ({ navigation }) => {
-  const [email, setEmail] = useState({ value: '', error: '' });
+  const [username, setUsername] = useState({ value: '', error: '' });
 
   const _onSendPressed = () => {
-    const emailError = emailValidator(email.value);
+    const usernameError = usernameValidator(username.value);
 
-    if (emailError) {
-      setEmail({ ...email, error: emailError });
+    if (usernameError) {
+      setUsername({ ...username, error: usernameError });
       return;
     }
 
-    navigation.navigate('LoginScreen');
+    navigation.navigate('LoginScreenClass');
   };
 
   return (
     <Background>
-      <BackButton goBack={() => navigation.navigate('LoginScreen')} />
+      <BackButton goBack={() => navigation.navigate('LoginScreenClass')} />
 
       <Logo />
 
@@ -34,14 +34,14 @@ const ForgotPasswordScreen = ({ navigation }) => {
       <TextInput
         label="E-mail address"
         returnKeyType="done"
-        value={email.value}
-        onChangeText={text => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
+        value={username.value}
+        onChangeText={text => setUsername({ value: text, error: '' })}
+        error={!!username.error}
+        errorText={username.error}
         autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
+        autoCompleteType="username"
+        textContentType="usernameAddress"
+        keyboardType="username-address"
       />
 
       <Button mode="contained" onPress={_onSendPressed} style={styles.button}>
@@ -50,7 +50,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.back}
-        onPress={() => navigation.navigate('LoginScreen')}
+        onPress={() => navigation.navigate('LoginScreenClass')}
       >
         <Text style={styles.label}>← Back to login</Text>
       </TouchableOpacity>

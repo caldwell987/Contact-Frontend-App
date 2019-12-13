@@ -8,24 +8,24 @@ import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import { theme } from '../core/theme';
 import {
-  emailValidator,
+  usernameValidator,
   passwordValidator,
   nameValidator,
 } from '../core/utils';
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: '', error: '' });
-  const [email, setEmail] = useState({ value: '', error: '' });
+  const [username, setUsername] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
 
   const _onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
-    const emailError = emailValidator(email.value);
+    const usernameError = usernameValidator(username.value);
     const passwordError = passwordValidator(password.value);
 
-    if (emailError || passwordError || nameError) {
+    if (usernameError || passwordError || nameError) {
       setName({ ...name, error: nameError });
-      setEmail({ ...email, error: emailError });
+      setUsername({ ...username, error: usernameError });
       setPassword({ ...password, error: passwordError });
       return;
     }
@@ -41,7 +41,7 @@ const RegisterScreen = ({ navigation }) => {
 
       <Header>Create Account</Header>
 
-      <TextInput
+      {/* <TextInput
         label="Name"
         returnKeyType="next"
         value={name.value}
@@ -51,16 +51,16 @@ const RegisterScreen = ({ navigation }) => {
       />
 
       <TextInput
-        label="Email"
+        label="Username"
         returnKeyType="next"
-        value={email.value}
-        onChangeText={text => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
+        value={username.value}
+        onChangeText={text => setUsername({ value: text, error: '' })}
+        error={!!username.error}
+        errorText={username.error}
         autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
+        autoCompleteType="username"
+        textContentType="usernameAddress"
+        keyboardType="username-address"
       />
 
       <TextInput
@@ -82,7 +82,7 @@ const RegisterScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </Background>
   );
 };
