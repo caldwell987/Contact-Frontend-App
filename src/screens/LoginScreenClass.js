@@ -30,8 +30,8 @@ class LoginScreenClass extends React.Component {
       console.log(password)
       axios.post("https://powerful-sea-75935.herokuapp.com/api/v1/sessions", {
         user: {
-            username: "David999",
-            password: "Password"
+            username: username,
+            password: password
         }
       },
         { withCredentials: true }

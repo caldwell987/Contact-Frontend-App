@@ -25,12 +25,20 @@ class Dashboard extends React.Component {
   }
 
   handleLogout(){
-    axios.delete("https://powerful-sea-75935.herokuapp.com/api/v1/logout", {withCredentials: true}).then(response => {
+    console.log("yo")
+    axios.delete("https://powerful-sea-75935.herokuapp.com/api/v1/logout", {
+      withCredentials: true })
+    .then(response => {
+      console.log(response)
       this.setState ({
         loggedInStatus: "NOT_LOGGED_IN",
         user: {},
         userName: ""
       })
+      console.log("yooo")
+      const { navigation } = this.props;
+      // debugger
+      navigation.navigate('HomeScreen')
     })
     .catch(error => {
         console.log("Logout Error ", error)

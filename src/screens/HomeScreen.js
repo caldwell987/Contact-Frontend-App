@@ -106,6 +106,7 @@ class HomeScreen extends React.Component {
 
   
   render() {
+    console.log("debugger")
     
     const { navigation } = this.props;
 
@@ -127,6 +128,7 @@ class HomeScreen extends React.Component {
           onPress={this.logIn}>
           LOGIN
         </Button>
+        
         <Button
           mode="outlined"
           onPress={() => navigation.navigate('RegisterScreen', {
