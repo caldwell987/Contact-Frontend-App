@@ -1,116 +1,121 @@
 import React, { memo, useState } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
+import PasswordInput from '../components/PasswordInputText';
 import BackButton from '../components/BackButton';
 import { theme } from '../core/theme';
 import { usernameValidator, passwordValidator } from '../core/utils';
 import axios from 'axios';
 
-class LoginScreenClass extends React.Component {
+export default class LoginScreenClass extends React.Component {
 
   constructor(props) {
+
     super(props) 
+
     this.state = {
       username: "",
       password: '',
       loginError: '',
       user: this.props.user
     }
+
     this.handleLogin = this.handleLogin.bind(this)
+    this._login = this._login.bind(this)
+
   }
 
+  
   handleLogin() {
-    const { navigation } = this.props;
-    console.log("yo")
-      const { username, password } = this.state
-      console.log(password)
-      axios.post("https://powerful-sea-75935.herokuapp.com/api/v1/sessions", {
-        user: {
-            username: username,
-            password: password
+    console.log("LoginScreen - handleLogin")
+    const { username, password } = this.state
+    console.log(password)
+    axios.post("https://powerful-sea-75935.herokuapp.com/api/v1/sessions", {
+      user: {
+          username: username,
+          password: password
+      }
+    },
+      { withCredentials: true }
+    )
+    .then(response => {
+        if (response.data.logged_in) {
+          this._login(response)
         }
-      },
-        { withCredentials: true }
-      )
-      .then(response => {
-          if (response.data.logged_in) {
-            navigation.navigate('Dashboard', {
-              user: response.data.user,
-              loggedInStatus: "LOGGED_IN"
-            });
-            // console.log(response.data)
-            // this.props.checkLoginStatus()
-          }
-          else {
-            console.log("nah")
-            this.setState({
-              loginError: 'Username Or Password is Incorrect'
-            })
-          }
-      })
-      .catch(error => {
-          console.log("Login Error", error)
-      })
+        else {
+          console.log("LoginScreen - handleLogin - Login Failed")
+          this.setState({
+            loginError: 'Username Or Password is Incorrect'
+          })
+        }
+    })
+    .catch(error => {
+        console.log("Login Error", error)
+    })
   }
-
 
   render() {
+
     const { navigation } = this.props;
 
-  return (
-    <Background>
-      <BackButton goBack={(e) => this.props.home(e)} />
-      {/* <BackButton goBack={() => this.props.navigation.navigate('HomeScreen')} /> */}
+    return (
+      <Background>
+        <BackButton goBack={(e) => this.props.home(e)} />
+        <Logo />
+        <Header>Welcome back.</Header> 
+        <Text>{this.state.loginError}</Text>
+        
+        <TextInput
+          label="Username"
+          returnKeyType="next"
+          defaultValue="David999"
+          value={this.state.username}
+          onChangeText={(username) => this.setState({username})}
+          autoCapitalize="none"
+          autoCompleteType="username"
+          textContentType="username"
+        />
 
-      <Logo />
- 
-      <Header>Welcome back.</Header> 
-      <Text>{this.state.loginError}</Text>
+        <PasswordInput
+          label="Password"
+          returnKeyType="done"
+          value={this.state.password}
+          onChangeText={(password) => this.setState({password})}
+        />
 
-      <TextInput
-        label="Username"
-        returnKeyType="next"
-        defaultValue="David999"
-        value={this.state.username}
-        onChangeText={(username) => this.setState({username})}
-        autoCapitalize="none"
-        autoCompleteType="username"
-        textContentType="username"
-      />
+        <View style={styles.forgotPassword}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ForgotPasswordScreen')}
+          >
+            <Text style={styles.label}>Forgot your password?</Text>
+          </TouchableOpacity>
+        </View>
 
-      <TextInput
-        label="Password"
-        returnKeyType="done"
-        value={this.state.password}
-        onChangeText={(password) => this.setState({password})}
+        <Button mode="contained" onPress={this.handleLogin}>
+          Login
+        </Button>
 
-      />
-
-      <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ForgotPasswordScreen')}
-        >
-          <Text style={styles.label}>Forgot your password?</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Button mode="contained" onPress={this.handleLogin}>
-        Login
-      </Button>
-
-      <View style={styles.row}>
-        <Text style={styles.label}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
-          <Text style={styles.link}>Sign up</Text>
-        </TouchableOpacity>
-      </View>
-    </Background>
-  );
+        <View style={styles.row}>
+          <Text style={styles.label}>Don’t have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+            <Text style={styles.link}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
+      </Background>
+    );
   }
+
+    _login = async(response) => {
+      const { navigation } = this.props;
+      console.log("LoginScreen - _login- IsLoggedIN")
+      await AsyncStorage.setItem('isLoggedIn', '1')
+      navigation.navigate('Dashboard');
+      this.props.checkLoginStatus()
+    }
 };
 
 const styles = StyleSheet.create({
@@ -130,56 +135,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+  passwordInput: {
+    margin: 20,
+  },
 });
 
-export default LoginScreenClass;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// handleSubmit() {
-
-  //   const { username, password } = this.state
-  //   console.log(password)
-  //   axios.post("https://powerful-sea-75935.herokuapp.com/api/v1/sessions", {
-  //     user: {
-  //         username: "David999",
-  //         password: "Password"
-  //     }
-  //   },
-  //     { withCredentials: true }
-  //   )
-  //     .then(response => {
-  //         if (response.data.logged_in) {
-  //           this.props.navigation.navigate('Dashboard', {
-  //             user: response.data,
-  //             loggedIn: response.data.logged_in
-  //           });
-  //           // console.log(response.data)
-  //         }
-  //         else {
-  //           console.log("nah")
-  //           this.setState({
-  //             loginError: 'Username Or Password is Incorrect'
-  //           })
-  //         }
-  //     })
-  //     .catch(error => {
-  //         console.log("Login Error", error)
-  //     })
-  // }

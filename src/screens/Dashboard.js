@@ -1,15 +1,11 @@
 import React, { memo } from 'react';
-import Background from '../components/Background';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
 import Button from '../components/Button';
-import { TouchableOpacity, Image, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, Image, StyleSheet, Text, View, AsyncStorage} from 'react-native';
 import axios from 'axios';
 import AllUsers from './AllUsers'
 
 
-class Dashboard extends React.Component {
+export default class Dashboard extends React.Component {
 
   constructor() {
     super() 
@@ -20,64 +16,79 @@ class Dashboard extends React.Component {
       lastName: "",
       userLoggedIn: false
     }
-
-    this.handleLogout = this.handleLogout.bind(this)
+    // this.checkLoginStatus = this.checkLoginStatus.bind(this)
   }
 
-  handleLogout(){
-    console.log("yo")
-    axios.delete("https://powerful-sea-75935.herokuapp.com/api/v1/logout", {
-      withCredentials: true })
+
+//  -------------------------------------- Collecting User Data --------------------------------------
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/logged_in", {withCredentials: true})
     .then(response => {
-      console.log(response)
+      if (response.data.logged_in && this.state.loggedInStatus === "NOT_LOGGED_IN") {
+        this.setState({
+          loggedInStatus: "LOGGED_IN",
+          user: response.data.user,
+          firstName: response.data.user.firstname,
+          lastName: response.data.user.lastname,
+          userLoggedIn: true
+        })
+        console.log("this user", this.state.user)
+      } 
+      else if (!response.data.logged_in & this.state.loggedInStatus === "LOGGED_IN") {
+        this.setState({
+          loggedInStatus: "NOT_LOGGED_IN",
+          user: {}
+        })
+        navigation.navigate('Dashboard', {
+          user: response.data.user,
+          loggedInStatus: "LOGGED_IN"
+        });
+      }
+    })
+    .catch(error => {
+      console.log("Login Error ", error)
+    })
+  }
+
+
+  //  -------------------------------------- Logging Out --------------------------------------
+
+  _logout = async() => {
+
+    console.log("Dashboard - _logout")
+
+    const { navigation } = this.props;
+
+    await AsyncStorage.clear()
+      navigation.navigate('HomeScreen')
+    
+      this.clearSession()
+      
+  }
+
+  clearSession() {
+    console.log("Dashboard - clearSession")
+
+    axios.delete("https://powerful-sea-75935.herokuapp.com/api/v1/logout", {withCredentials: true}).then(response => {
       this.setState ({
         loggedInStatus: "NOT_LOGGED_IN",
         user: {},
-        userName: ""
+        firstName: "",
+        lastName: ""
       })
-      console.log("yooo")
-      const { navigation } = this.props;
-      // debugger
-      navigation.navigate('HomeScreen')
     })
     .catch(error => {
         console.log("Logout Error ", error)
-      })  
-  }
-
-  componentDidMount() {
-    // console.log(this.props.loggedInStatus)
-    const { navigation } = this.props;
-    let userDetails = navigation.getParam('user')
-    let userLogged = navigation.getParam('loggedInStatus')
-
-    console.log(userLogged)
-
-    if (userLogged === "LOGGED_IN") {
-      this.setState({
-        loggedInStatus: "LOGGED_IN",
-        user: userDetails,
-        firstName: userDetails.firstname,
-        lastName: userDetails.lastname,
-        userLoggedIn: true
-      })
-      userDetails
-    }
-    
-    else if (userLogged === "NOT_LOGGED_IN") {
-      this.setState({
-        loggedInStatus: "NOT_LOGGED_IN",
-        user: {}
-      })
-    }
+      }) 
   }
 
 
-
-
+  //  -------------------------------------- Display Info --------------------------------------
 
   render() {
-    
+
     const { navigation } = this.props;
 
     return (
@@ -92,10 +103,10 @@ class Dashboard extends React.Component {
                 </View>   
 
                 <View style={styles.buttonContainer}>
-                  <Button mode="outlined" onPress={() => navigation.navigate('HomeScreen')}> HOME </Button>
+                  {/* <Button mode="outlined" onPress={() => navigation.navigate('HomeScreen')}> HOME </Button> */}
                 </View>      
                 <View style={styles.buttonContainer}>
-                <Button mode="outlined" onPress={this.handleLogout}> LOGOUT </Button> 
+                <Button mode="outlined" onPress={this._logout}> LOGOUT </Button> 
                 </View>           
               </View>
           </View>
@@ -105,10 +116,8 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
 
-
-
+//  -------------------------------------- Styling  --------------------------------------
 
 
 const styles = StyleSheet.create({
@@ -177,54 +186,3 @@ const styles = StyleSheet.create({
     width:250,
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// <Logo />
-//       <Text>
-//         {this.state.loggedInStatus}
-//       </Text>
-//       <Header>{this.state.userName}</Header>
-//       <Paragraph>
-//         Your amazing app starts here. Open you favourite code editor and start
-//         editing this project.
-//       </Paragraph>
-
-
-
-
-    // if (userDetails.logged) {
-    //   this.setState({
-    //     userLoggedIn: true
-    //   })
-    //   // console.log("truuueee")
-    // } else {
-    //   // console.log(userDetails.logged_in)
-    //     // navigation.navigate('HomeScreen')
-    //   }
-
-
-    // this.setState({
-    //   userLoggedIn: userDetails.logged_in
-    // })
-    // console.log(this.state.userLoggedIn)

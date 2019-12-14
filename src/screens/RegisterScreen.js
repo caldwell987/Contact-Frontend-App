@@ -53,23 +53,18 @@ class RegisterScreen extends React.Component {
       )
       .then(response => {
           if (response.data.status === 'created')  {
-            navigation.navigate('Dashboard', 
-            {
-              user: response.data.user,
-              loggedInStatus: "LOGGED_IN"
-            }
-            );
-            console.log(response.data)
+            navigation.navigate('HomeScreen')
+            console.log("RegisterScreen - handleSubmit - User Created ", response.data)
           }
           else {
-            console.log("nah")
+            console.log("RegisterScreen - handleSubmit - REG FAILED")
             this.setState({
               registrationErrors: 'Username Or Password is Incorrect'
             })
           }
       })
       .catch(error => {
-          console.log("Login Error", error)
+          console.log("RegisterScreen - handleSubmit - Login Error ", error)
       })
   }
 

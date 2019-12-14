@@ -10,6 +10,7 @@ import { RegisterScreen } from '.';
 import axios from 'axios';
 
 
+
 class HomeScreen extends React.Component {
 
   constructor() {
@@ -28,15 +29,8 @@ class HomeScreen extends React.Component {
     this.home = this.home.bind(this)
     this.signUp = this.signUp.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
-    this.checkLoginStatus = this.checkLoginStatus.bind(this)
   }
 
-  componentDidMount() {
-    this.checkLoginStatus()
-    this.setState({
-      toggle: "one"
-    });
-  }
 
   handleLogout(){
     axios.delete("https://powerful-sea-75935.herokuapp.com/api/v1/logout", {withCredentials: true}).then(response => {
@@ -49,40 +43,6 @@ class HomeScreen extends React.Component {
     .catch(error => {
         console.log("Logout Error ", error)
       })  
-  }
-
-  justLoggedIn() {
-    console.log("yooooooooooooo")
-    this.checkLoginStatus()
-  }
-
-
-  checkLoginStatus() {
-    const { navigation } = this.props;
-    axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/logged_in", {withCredentials: true})
-    .then(response => {
-      if (response.data.logged_in && this.state.loggedInStatus === "NOT_LOGGED_IN") {
-        this.setState({
-          loggedInStatus: "LOGGED_IN",
-          user: response.data.user,
-          userName: "Hey " + response.data.user.firstname,
-          userLoggedIn: true
-        })
-        navigation.navigate('Dashboard', {
-          user: response.data.user,
-          loggedInStatus: "LOGGED_IN"
-        });
-      } 
-      else if (!response.data.logged_in & this.state.loggedInStatus === "LOGGED_IN") {
-        this.setState({
-          loggedInStatus: "NOT_LOGGED_IN",
-          user: {}
-        })
-      }
-    })
-    .catch(error => {
-      console.log("Login Error ", error)
-    })
   }
 
 
@@ -105,9 +65,7 @@ class HomeScreen extends React.Component {
   };
 
   
-  render() {
-    console.log("debugger")
-    
+  render() {    
     const { navigation } = this.props;
 
 
@@ -116,12 +74,12 @@ class HomeScreen extends React.Component {
       <Background>
       
         <Logo />
-        <Header>Login Template</Header>
+        <Header>The Link</Header>
         <Paragraph>
-          Logged In Status: {this.state.loggedInStatus}
+        Connecting Made Easy
         </Paragraph>
         <Paragraph>
-          User Logged In: {this.state.user.firstname}
+        Logged In Status: {this.state.loggedInStatus}
         </Paragraph>
         <Button 
           mode="contained" 

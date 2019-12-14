@@ -1,15 +1,16 @@
 import React, { memo } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { TextInput as Input } from 'react-native-paper';
+import PasswordInputText from 'react-native-hide-show-password-input'
 import { theme } from '../core/theme';
 
-const TextInput = ({ errorText, ...props }) => (
+const PasswordInput = ({ errorText, ...props }) => (
   <View style={styles.container}>
-    <Input
+    <PasswordInputText
       style={styles.input}
-      // selectionColor={theme.colors.primary}
+      selectionColor={theme.colors.primary}
       underlineColor="transparent"
-      // mode="outlined"
+      mode="outlined"
       {...props}
     />
     {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     marginVertical: 12,
-    borderBottomWidth: .5
+    // borderWidth: 1,
   },
   input: {
     backgroundColor: theme.colors.surface,
@@ -33,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(TextInput);
+export default memo(PasswordInput);
