@@ -3,6 +3,8 @@ import Button from '../components/Button';
 import { TouchableOpacity, Image, StyleSheet, Text, View, AsyncStorage} from 'react-native';
 import axios from 'axios';
 import AllUsers from './AllUsers'
+import ContactByType from './ContactByType';
+import AddNewContact from './AddNewContact';
 
 
 export default class Dashboard extends React.Component {
@@ -14,15 +16,24 @@ export default class Dashboard extends React.Component {
       user: {},
       firstName: "Please Login",
       lastName: "",
-      userLoggedIn: false
+      userLoggedIn: false,
+      toggleContacts: false,
+      toggleAddContact: false,
+      toggleQRCode: false,
+      contacts: [],
+      contactsCopy: [],
+      myContacts: [],
+      myContactsCopy: []
     }
     // this.checkLoginStatus = this.checkLoginStatus.bind(this)
+    this.toggleContacts = this.toggleContacts.bind(this)
+    this.toggleAddContact = this.toggleAddContact.bind(this)
   }
 
 
 //  -------------------------------------- Collecting User Data --------------------------------------
 
-  componentDidMount() {
+  componentWillMount() {
     const { navigation } = this.props;
     axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/logged_in", {withCredentials: true})
     .then(response => {
@@ -32,9 +43,8 @@ export default class Dashboard extends React.Component {
           user: response.data.user,
           firstName: response.data.user.firstname,
           lastName: response.data.user.lastname,
-          userLoggedIn: true
-        })
-        console.log("this user", this.state.user)
+          userLoggedIn: true,
+        }, () => this.MyContactsFunc(this.state.user.id))
       } 
       else if (!response.data.logged_in & this.state.loggedInStatus === "LOGGED_IN") {
         this.setState({
@@ -84,6 +94,44 @@ export default class Dashboard extends React.Component {
       }) 
   }
 
+   //  -------------------------------------- My Contacts --------------------------------------
+
+
+   MyContactsFunc(userId) {
+    axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/user_id/" + userId, )
+    .then(response => { 
+      this.setState({
+        myContacts: response.data.contacts,
+        myContactsCopy: response.data
+      })
+      // console.log("Dashboard - myContactsFunc - Users Contacts", this.state.myContacts)
+    })
+  }
+
+
+ //  -------------------------------------- Toggle --------------------------------------
+
+
+  toggleContacts() {
+    this.setState({
+      toggleContacts: !this.state.toggleContacts
+    });
+  }
+
+  toggleAddContact() {
+    this.setState({
+      toggleAddContact: !this.state.toggleAddContact
+    });
+  }
+
+  toggleQRCode() {
+    this.setState({
+      toggle: "three"
+    });
+  };
+
+
+
 
   //  -------------------------------------- Display Info --------------------------------------
 
@@ -92,6 +140,9 @@ export default class Dashboard extends React.Component {
     const { navigation } = this.props;
 
     return (
+
+
+      //  -------------------------------- Header -------------------------------- 
     
       <View style={styles.container}>
         <View style={styles.header}></View>
@@ -101,6 +152,34 @@ export default class Dashboard extends React.Component {
                 <View style={styles.nameContainer}>
                 <Text style={styles.name} > {this.state.firstName} {this.state.lastName} </Text>
                 </View>   
+
+                {/* -------------------------------- View Contacts --------------------------------  */}
+
+
+                { this.state.toggleContacts &&
+                <View style={styles.contactContent}>
+                   <ContactByType myContacts={this.state.myContacts} /> 
+                </View> 
+                }
+
+                <View style={styles.buttonContainer}>
+                <Button mode="outlined" onPress={this.toggleContacts}> My Contacts </Button> 
+                </View> 
+
+
+                {/* -------------------------------- Add New Contact --------------------------------  */}
+
+                { this.state.toggleAddContact &&
+                <View style={styles.contactContent}>
+                   <AddNewContact myContacts={this.state.myContacts} /> 
+                </View> 
+                }
+
+                <View style={styles.buttonContainer}>
+                <Button mode="outlined" onPress={this.toggleAddContact}> Add New Contact </Button> 
+                </View>   
+
+  
 
                 <View style={styles.buttonContainer}>
                   {/* <Button mode="outlined" onPress={() => navigation.navigate('HomeScreen')}> HOME </Button> */}
@@ -140,13 +219,13 @@ const styles = StyleSheet.create({
     marginTop:40,
   },
   bodyContent: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     padding:30,
   },
   name:{
     fontSize:28,
-    color: "#696969",
+    color: "black",
     fontWeight: "600"
   },
   info:{
@@ -184,5 +263,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom:5,
     width:250,
+  },
+  contactContent: {
+    // flex: 1,
+    alignItems: 'center',
+    height: 200,
+    width: 500,
+    marginTop: 10
   },
 });
