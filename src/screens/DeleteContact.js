@@ -1,12 +1,12 @@
 import React, { memo } from 'react';
 import Button from '../components/Button';
-import { TouchableOpacity, Image, StyleSheet, Text, View, Linking, SafeAreaView, ScrollView} from 'react-native';
+import { TouchableOpacity, Image, StyleSheet, Text, View, Linking, Alert, ScrollView} from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
 
 
-export default class contactByType extends React.Component {
+export default class DeleteContact extends React.Component {
 
   constructor(props) {
     super(props) 
@@ -20,7 +20,7 @@ export default class contactByType extends React.Component {
       instagram: [],
       snapChat: [],
     }
-    // this.checkLoginStatus = this.checkLoginStatus.bind(this)
+     this.delete = this.delete.bind(this)
   }
 
   //  -------------------------------------- Contact By Type--------------------------------------
@@ -61,6 +61,36 @@ export default class contactByType extends React.Component {
 
 
 
+  delete(id) {
+    let contactId = id
+    console.log("delete", contactId)
+    Alert.alert(
+      "Are You Sure?",
+      'Keep your app up to date to enjoy the latest features',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: (e) => 
+          axios.delete("https://powerful-sea-75935.herokuapp.com/api/v1/contacts/" + contactId, {})
+            .then(response => {
+              console.log("Contact Was Deleted ", response)
+            })
+            .catch(error => {
+              console.log("Delete Contact", error);
+            })
+        },
+      ],
+    );
+
+  }
+
+
+
   //  -------------------------------------- Display Info --------------------------------------
 
   render() {
@@ -71,11 +101,11 @@ export default class contactByType extends React.Component {
     return (
             <ScrollView style={styles.scrollView}>
                 <View style={styles.container}>
-                    <Text style={styles.name} > Contacts  </Text>
-                        {this.state.phone.map(phone => <Text style={styles.contacts} key={phone.id} onPress={() => Linking.openURL(`tel:${phone.value}`)} > Phone: {phone.value} </Text> )}
-                        {this.state.email.map(email => <Text style={styles.contacts} key={email.id} onPress={() => Linking.openURL(`mailto:${email.value}`)} > Email: {email.value} </Text> )}
-                        {this.state.website.map(website => <Text style={styles.contacts} key={website.id} onPress={() => Linking.openURL(`https://${website.value}`)} > Website: {website.value} </Text> )}
-                        {this.state.instagram.map(instagram => <Text style={styles.contacts} key={instagram.id} onPress={() => Linking.openURL(`https://${instagram.value}`)} > Instagram: {instagram.value} </Text> )}
+                    <Text style={styles.name} > Delete Contacts  </Text>
+                        {this.state.phone.map(phone => <Text style={styles.contacts} key={phone.id} onPress={() => this.delete(phone.id)} > Phone: {phone.value} </Text> )}
+                        {this.state.email.map(email => <Text style={styles.contacts} key={email.id} onPress={() => this.delete(email.id)} > Email: {email.value} </Text> )}
+                        {this.state.website.map(website => <Text style={styles.contacts} key={website.id} onPress={() => this.delete(website.id)} > Website: {website.value} </Text> )}
+                        {this.state.instagram.map(instagram => <Text style={styles.contacts} key={instagram.id} onPress={() => this.delete()} > Instagram: {instagram.value} </Text> )}
                 </View>
             </ScrollView>
     )

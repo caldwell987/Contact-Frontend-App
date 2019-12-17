@@ -10,6 +10,7 @@ import {
   RegisterScreen,
   ForgotPasswordScreen,
   Dashboard,
+  SearchScreen
 } from './screens';
 import { Component } from 'react';
 
@@ -21,7 +22,7 @@ const Router = createStackNavigator(
     LoginScreenClass,
     RegisterScreen,
     ForgotPasswordScreen,
-
+    SearchScreen
   },
   {
     // initialRouteName: 'HomeScreen',

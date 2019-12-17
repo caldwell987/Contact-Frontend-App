@@ -5,6 +5,7 @@ import axios from 'axios';
 import AllUsers from './AllUsers'
 import ContactByType from './ContactByType';
 import AddNewContact from './AddNewContact';
+import DeleteContact from './DeleteContact';
 
 
 export default class Dashboard extends React.Component {
@@ -19,15 +20,17 @@ export default class Dashboard extends React.Component {
       userLoggedIn: false,
       toggleContacts: false,
       toggleAddContact: false,
+      toggleDeleteContact: false,
       toggleQRCode: false,
       contacts: [],
       contactsCopy: [],
       myContacts: [],
       myContactsCopy: []
     }
-    // this.checkLoginStatus = this.checkLoginStatus.bind(this)
+    this.addedContactUpdated = this.addedContactUpdated.bind(this)
     this.toggleContacts = this.toggleContacts.bind(this)
     this.toggleAddContact = this.toggleAddContact.bind(this)
+    this.toggleDeleteContact = this.toggleDeleteContact.bind(this)
   }
 
 
@@ -124,11 +127,28 @@ export default class Dashboard extends React.Component {
     });
   }
 
+  toggleDeleteContact() {
+    this.setState({
+      toggleDeleteContact: !this.state.toggleDeleteContact
+    });
+  }
+
   toggleQRCode() {
     this.setState({
       toggle: "three"
     });
   };
+
+  //  -------------------------------------- Add Contact --------------------------------------
+
+  addedContactUpdated(contact) {
+      console.log("Test Add Contact", contact)
+      let contacts = this.state.myContactsCopy
+      this.setState({
+        toggleAddContact: !this.state.toggleAddContact,
+        myContacts: [...contacts, contact]
+      })
+  }
 
 
 
@@ -171,7 +191,11 @@ export default class Dashboard extends React.Component {
 
                 { this.state.toggleAddContact &&
                 <View style={styles.contactContent}>
-                   <AddNewContact myContacts={this.state.myContacts} /> 
+                   <AddNewContact 
+                      myContacts={this.state.myContacts}
+                      userId={this.state.user.id} 
+                      addedContactUpdated={(e) => this.addedContactUpdated(e)}
+                      /> 
                 </View> 
                 }
 
@@ -179,10 +203,26 @@ export default class Dashboard extends React.Component {
                 <Button mode="outlined" onPress={this.toggleAddContact}> Add New Contact </Button> 
                 </View>   
 
+
+                {/* -------------------------------- Delete Contact --------------------------------  */}
+
+
+                { this.state.toggleDeleteContact &&
+                <View style={styles.contactContent}>
+                   <DeleteContact myContacts={this.state.myContacts} /> 
+                </View> 
+                }
+
+                <View style={styles.buttonContainer}>
+                <Button mode="outlined" onPress={this.toggleDeleteContact}> Delete Contact </Button> 
+                </View> 
+
+
+                {/* -------------------------------- NAV --------------------------------  */}
   
 
                 <View style={styles.buttonContainer}>
-                  {/* <Button mode="outlined" onPress={() => navigation.navigate('HomeScreen')}> HOME </Button> */}
+                  <Button mode="outlined" onPress={() => navigation.navigate('SearchScreen')}> Search </Button>
                 </View>      
                 <View style={styles.buttonContainer}>
                 <Button mode="outlined" onPress={this._logout}> LOGOUT </Button> 
@@ -269,6 +309,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 200,
     width: 500,
-    marginTop: 10
+    marginTop: 10,
+    marginBottom: 20
   },
 });
