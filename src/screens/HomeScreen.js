@@ -1,13 +1,17 @@
 import React, { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import LoginScreenClass from './LoginScreenClass';
+import HomeBackground from '../components/HomeBackground';
+import HomeMenuHeader from '../components/HomeMenuHeader';
+import Button from '../components/Button';
+import { SafeAreaView } from 'react-navigation';
+import { RegisterScreen } from '.';
+import axios from 'axios';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
-import Button from '../components/Button';
 import Paragraph from '../components/Paragraph';
-import LoginScreenClass from './LoginScreenClass';
 import BackButton from '../components/BackButton';
-import { RegisterScreen } from '.';
-import axios from 'axios';
 
 
 
@@ -66,42 +70,45 @@ class HomeScreen extends React.Component {
 
   
   render() {    
+    console.disableYellowBox = true
     const { navigation } = this.props;
 
 
     if (this.state.toggle === "one") {
      return (
-      <Background>
-      
-        <Logo />
-        <Header>The Link</Header>
-        <Paragraph>
-        Connecting Made Easy
-        </Paragraph>
-        <Paragraph>
-        Logged In Status: {this.state.loggedInStatus}
-        </Paragraph>
-        <Button 
-          mode="contained" 
-          onPress={this.logIn}>
-          LOGIN
-        </Button>
-        
-        <Button
-          mode="outlined"
-          onPress={() => navigation.navigate('RegisterScreen', {
-            userLoggedIn: (e) => this.userLoggedIn(e)
-          })}
-        >
-          Sign Up
-        </Button>
+      <HomeBackground >
+        <HomeMenuHeader />
+        <View style={styles.viewContainer}>
+          <View style={styles.buttonContainer}> 
+            <Button 
+              mode="outlined"
+              style={styles.button} 
+              onPress={this.logIn}>
+              LOGIN
+            </Button>
+          </View>
 
-        <Button 
-          mode="contained" 
-          onPress={this.handleLogout}>
-          LOGOUT
-        </Button>
-      </Background>
+          <View style={styles.buttonContainer}> 
+            <Button 
+              mode="contained"
+              style={styles.button} 
+              onPress={this.signUp}>
+              SignUp
+            </Button>
+          </View>
+          
+          {/* <View style={styles.buttonContainer}>
+            <Button
+              mode="contained"
+              style={styles.button} 
+              onPress={() => navigation.navigate('RegisterScreen', { userLoggedIn: (e) => this.userLoggedIn(e) })}
+              > Sign Up           
+          </Button>
+        </View> */}
+
+        </View>
+      </HomeBackground>
+
     )
   }
   else if(this.state.toggle === "two") { 
@@ -127,6 +134,36 @@ class HomeScreen extends React.Component {
 
 export default HomeScreen;
 
+
+const styles = StyleSheet.create({
+  viewContainer: {
+    marginTop:'70%',
+    flex: 0,
+    padding: 0,
+    width: '100%',
+    // maxWidth: 340,
+    // // alignSelf: 'center',
+    // // alignItems: 'center',
+    // // justifyContent: 'center',
+  },
+
+  buttonContainer: {
+    marginBottom:30,
+    flex: 0,
+    height:60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    justifyContent: 'center',
+    width: '70%',
+    alignItems: 'stretch',
+    height:60,
+    // borderColor: '#CFCDD7',
+    // borderWidth: 1,
+  },
+
+})
 
 
 

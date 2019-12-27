@@ -53,8 +53,9 @@ class RegisterScreen extends React.Component {
       )
       .then(response => {
           if (response.data.status === 'created')  {
-            navigation.navigate('HomeScreen')
+            // const goHome = this.props;
             console.log("RegisterScreen - handleSubmit - User Created ", response.data)
+            this.props.home()
           }
           else {
             console.log("RegisterScreen - handleSubmit - REG FAILED")
@@ -74,7 +75,7 @@ class RegisterScreen extends React.Component {
 
       return (
         <Background>
-          <BackButton goBack={() => navigation.navigate('HomeScreen')} />
+          <BackButton goBack={() => this.props.home()} />
 
           <Logo />
 

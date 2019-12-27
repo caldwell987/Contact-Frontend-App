@@ -10,7 +10,12 @@ import {
   RegisterScreen,
   ForgotPasswordScreen,
   Dashboard,
-  SearchScreen
+  SearchScreen,
+  DeleteContact,
+  NewContactScreen,
+  UserShowScreen,
+  ContactScreen,
+  SettingsScreen,
 } from './screens';
 import { Component } from 'react';
 
@@ -22,7 +27,12 @@ const Router = createStackNavigator(
     LoginScreenClass,
     RegisterScreen,
     ForgotPasswordScreen,
-    SearchScreen
+    SearchScreen,
+    DeleteContact,
+    NewContactScreen,
+    UserShowScreen,
+    ContactScreen,
+    SettingsScreen,
   },
   {
     // initialRouteName: 'HomeScreen',
@@ -30,7 +40,10 @@ const Router = createStackNavigator(
   }
 );
 
-const AuthStack = createStackNavigator({HomeScreen})
+const AuthStack = createStackNavigator({HomeScreen}, {
+    // initialRouteName: 'HomeScreen',
+    headerMode: 'none',
+  }, {RegisterScreen})
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {

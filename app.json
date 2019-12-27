@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "React Native Simple Login Template",
-    "slug": "react-native-simple-login-template",
+    "name": "Contact-Connect",
+    "slug": "Stay-Connected",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
@@ -13,7 +13,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

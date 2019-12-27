@@ -1,8 +1,9 @@
 import React, { memo } from 'react';
 import Button from '../components/Button';
-import { TouchableOpacity, Image, StyleSheet, Text, View, AsyncStorage} from 'react-native';
+import { TouchableOpacity, Image, StyleSheet, Text, View, ScrollView} from 'react-native';
 import axios from 'axios';
 import { Searchbar } from 'react-native-paper';
+import BackButton from '../components/BackButton';
 
 
 export default class Search extends React.Component {
@@ -68,6 +69,12 @@ export default class Search extends React.Component {
   } 
 
 
+  userPress(userId) {
+    const { navigation } = this.props;
+    console.log("SearchScreen - userPress ", userId)
+    navigation.navigate('UserShowScreen', {userId: userId})
+  }
+
 
   //  -------------------------------------- Add Contact --------------------------------------
 
@@ -80,7 +87,8 @@ export default class Search extends React.Component {
 
     const { navigation } = this.props;
     const { searchValue, users } = this.state;
-    console.log("list of Users ", users)
+    let userId = navigation.getParam('userId')
+    // console.log("SearchScreen UserId ", userId)
 
     return (
 
@@ -88,27 +96,29 @@ export default class Search extends React.Component {
       //  -------------------------------- Header -------------------------------- 
     
       <View style={styles.container}>
-            
+          <BackButton goBack={() => navigation.navigate('Dashboard')} />
             <View style={styles.body}>
               <View style={styles.bodyContent}>
                 <View style={styles.nameContainer}>
                 <Text style={styles.name} > Search For Users </Text>
                 </View>   
 
-                <View style={styles.buttonContainer}>
+                {/* <View style={styles.buttonContainer}>
                   <Button mode="outlined" onPress={() => navigation.navigate('Dashboard')}> HOME </Button> 
-                </View> 
+                </View>  */}
 
                 <Searchbar
                     placeholder="Search"
                     onChangeText={(e) => this.handleChange(e)}
                 />
 
-                <View style={styles.contactContent}>
+                <ScrollView style={styles.scrollView}>
 
-                {this.state.users.map(user => <Text style={styles.contacts} key={users.id} > {user.username} </Text> )}
-    
-                </View> 
+                  <View style={styles.contactContent}>
+                    {this.state.users.map(user => <Text style={styles.contacts} key={user.id} onPress={() => this.userPress(user.id)} > {user.username} </Text> )}
+                  </View> 
+
+                </ScrollView>
 
                 
                 {/* -------------------------------- NAV --------------------------------  */}
@@ -130,18 +140,29 @@ export default class Search extends React.Component {
 
 
 const styles = StyleSheet.create({
+  container: {
+    // alignItems: 'center'
+        marginBottom: 10,
+    },
   body:{
-    marginTop:40,
+    marginTop:80,
+    height: 50,
   },
   bodyContent: {
     // flex: 1,
     alignItems: 'center',
     padding:30,
+    height: 500
   },
   name:{
     fontSize:28,
     color: "black",
     fontWeight: "600"
+  },
+  scrollView: {
+    marginHorizontal: 20,
+    width: 500,
+    marginTop: 20,
   },
   info:{
     fontSize:16,
@@ -172,7 +193,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    marginTop:0,
+    marginTop:15,
     height:70,
     justifyContent: 'center',
     alignItems: 'center',

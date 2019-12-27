@@ -1,18 +1,16 @@
 import React, { memo } from 'react';
-import Icon from 'react-native-vector-icons/Ionicons'
-import { theme } from '../core/theme';
-import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
-import Button from '../components/Button';
-import { TextInput, Image, StyleSheet, Text, View, AsyncStorage} from 'react-native';
+// import Button from '../components/Button';
+import { TouchableOpacity, Image, StyleSheet, Text, View, AsyncStorage} from 'react-native';
 import axios from 'axios';
 import AllUsers from './AllUsers'
-import QRCode from 'react-native-qrcode-svg';
-import { SafeAreaView } from 'react-navigation';
-import ContactScreen from './ContactScreen';
+import { theme } from '../core/theme';
+import Icon from 'react-native-vector-icons/Ionicons'
+import { Avatar, Card, Title, Paragraph, Button } from 'react-native-paper';
 
 
 
-export default class Dashboard extends React.Component {
+
+export default class SettingsScreen extends React.Component {
 
   constructor() {
     super() 
@@ -150,67 +148,75 @@ export default class Dashboard extends React.Component {
   //  -------------------------------------- Display Info --------------------------------------
 
   render() {
-    console.disableYellowBox = true
     const { navigation } = this.props;
-    let myURL = "https://powerful-sea-75935.herokuapp.com/connect/" + this.state.userId
-    // let logoFromFile = require('../assets/PersonLogo.png');
-    // console.log(myURL)
-    // console.log("helllo!!!!!!!!!!!!!!!!!!!")
-    // console.log(this.state.myContacts)
-
+    const { firstName, lastName, user } = this.state;
 
     return (
       <View style={styles.container}>
 
         <View style={styles.header}>
-          <Text style={styles.headerText}> Dashboard </Text>
-          <Icon style={styles.headerIcon} onPress={() => navigation.navigate('SettingsScreen')} name="ios-settings" color="#ccc" size={30}/>
+          <Text style={styles.headerText}> Settings </Text>
+          <Icon style={styles.headerIcon} onPress={() => navigation.navigate('Dashboard')} name="ios-contact" color="#ccc" size={30}/>
         </View>
             {/* <Image style={styles.avatar} source={{uri: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'}}/> */}
         <View style={styles.body}>
           <View style={styles.bodyContent}>
 
+          <Text style={styles.bodyLargeText}>{firstName} {lastName}</Text>
+          {/* <Text style={styles.bodySmallText}>{user.username}</Text>   */}
 
-          <Card>
-            <Card.Title title="Card Title" subtitle="Card Subtitle" left={(props) => <Avatar.Icon {...props} icon="folder" />} />
-          </Card>
-          
-          {/* <SafeAreaView> */}
-          <View style={styles.qrContainer}>
-            <QRCode
-                value={myURL}
-                size={200}
-                color='#15317E'
-                // backgroundColor='red'
-                // logo={logoFromFile}
-                // logoSize={40}
-                // logoBackgroundColor='white'
-                // logoBorderRadius={10}
-                // logoMargin={10}
-                />
-          </View>
+            {/* -------------------------------- View Contacts --------------------------------  */}
 
-          <View style={styles.extraContainer}>
-              {/* <ContactScreen userId={this.state.userId} /> */}
-          </View>
-          {/* </SafeAreaView> */}
+            <Card onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})} >
+              <Card.Title 
+                title="My Profile" 
+                subtitle="See Your Connections" 
+                left={(props) => <Avatar.Icon {...props} icon="account" />} 
+              />
+            </Card>
+
+            {/* "plus","plus-box","plus-box-outline", "qrcode-scan" "plus-circle","plus-circle-multiple-outline","plus-circle-outline","plus-minus","plus-minus-box" */}
 
 
+            <Card onPress={() => navigation.navigate('NewContactScreen', {userId: this.state.userId})} >
+              <Card.Title 
+                title="Add Connection" 
+                subtitle="Add a Connection to Share" 
+                left={(props) => <Avatar.Icon {...props} icon="plus" />} 
+              />
+            </Card>
 
-            {/* -------------------------------- Bottom Menu --------------------------------  */}
+
+            <Card onPress={() => navigation.navigate('DeleteContact', {userId: this.state.userId})} >
+              <Card.Title 
+                title="Remove Connection" 
+                subtitle="Remove a Connection From Your List" 
+                left={(props) => <Avatar.Icon {...props} icon="minus" />} 
+              />
+            </Card>
+
+
+            <Card onPress={this._logout} >
+              <Card.Title 
+                title="Logout" 
+                subtitle="Logout of App" 
+                left={(props) => <Avatar.Icon {...props} icon="power" />} 
+              />
+            </Card>
+
+
+
+            
+        
 
             <View style={styles.footer} >
-
-            <View style={styles.footerIcon} >
               <Icon 
                 style={styles.footerContent} 
                 onPress={() => navigation.navigate('Dashboard')} 
-                name="ios-home" color="#ccc" size={25}
-
+                name="ios-home" 
+                color="#ccc" 
+                size={25}
               />
-            </View>
-
-
               <Icon 
                 style={styles.footerContent} 
                 onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})}
@@ -286,56 +292,62 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
 
-  buttonContainer: {
+  bodyLargeText: {
     // flex: 1,
     // flexDirection: 'row',
-    alignItems: 'stretch',
-    marginTop:0,
-    height:100,
+    fontSize: 25,
+    color: 'black',
+    fontFamily: 'GillSans-SemiBold',
+    height:40,
+    marginLeft: '5%',
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:30,
+  },
+  bodySmallText: {
+    // flex: 1,
+    // flexDirection: 'row',
+    fontSize: 15,
+    color: 'black',
+    fontFamily: 'GillSans-SemiBold',
+    height:30,
+    marginLeft: '5%',
+    marginTop: 2,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom:15,
-    padding: 20
+  },
+
+  buttonContainer: {
+    // flex: 1,
+    // flexDirection: 'row',
+    alignSelf: "flex-start",
+    alignItems: 'stretch',
+    marginTop:0,
+    height:60,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    width: '100%',
+    // alignItems: 'center',
+    // marginBottom:15,
+    // padding: 20
   },
   button: {
-    alignItems: 'stretch',
-    margin: 10,
-    height:100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:5,
+    // alignSelf: 'stretch',
+    width: '100%',
+    // margin: 10,
+    // alignSelf: "flex-start",
+    // height:40,
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    marginBottom:0,
     // borderColor: '#CFCDD7',
     // borderWidth: 1,
   },
-  qrContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // height: 200,
-    // width: 200,
-    // marginTop: 100,
-    // borderColor: 'red',
-    // borderWidth: 1,
-    // marginLeft: 100,
-},
-
-extraContainer: {
-  flex: 1,
-  backgroundColor: 'white',
-  alignItems: 'center',
-  justifyContent: 'center',
-  // height: 200,
-  // width: 200,
-  // marginTop: 100,
-  // borderColor: 'red',
-  // borderWidth: 1,
-  // marginLeft: 100,
-},
-qrCode: {
-  backgroundColor: 'black',
-
-},
 
   footer: {
     flex: 1,

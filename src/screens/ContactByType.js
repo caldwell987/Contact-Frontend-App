@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import Button from '../components/Button';
-import { TouchableOpacity, Image, StyleSheet, Text, View, Linking, SafeAreaView, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, Linking, SafeAreaView, ScrollView} from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 
@@ -27,8 +27,8 @@ export default class contactByType extends React.Component {
 
 
   componentDidMount() {
+
     let contacts = this.props.myContacts;
-    // console.log("ContactByType - Render - contacts ", contacts)
 
     let phone = contacts.filter(contact => contact.kind == "Phone");
     let email = contacts.filter(contact => contact.kind == "Email");
@@ -39,8 +39,6 @@ export default class contactByType extends React.Component {
     let Instagram = contacts.filter(contact => contact.kind == "Instagram");
     let SnapChat = contacts.filter(contact => contact.kind == "Snapchat");
 
-    console.log("ContactByType - Render - Phone ", phone.value)
-
     this.setState({
       phone: phone,
       email: email,
@@ -50,13 +48,9 @@ export default class contactByType extends React.Component {
       facebook: Facebook,
       instagram: Instagram,
       snapChat: SnapChat
-    }, ()=> 
-    console.log("ContactByType - CDM - this.state.phone ", this.state.phone)
+    }
+// , ()=> console.log("ContactByType - CDM - this.state.phone ", this.state.phone)
     );
-
-    // console.log("ContactByType - Render - This.State.Phone ", this.state.phone)
-    // console.log("ContactByType - Render - Phone ", this.state.email)
-    // console.log("ContactByType - Render - Phone ", this.state.email)
   }
 
 
@@ -64,9 +58,6 @@ export default class contactByType extends React.Component {
   //  -------------------------------------- Display Info --------------------------------------
 
   render() {
-
-    const { navigation } = this.props;
-    // console.log("ContactByType - Render - Contacts ", this.props.myContacts)
 
     return (
             <ScrollView style={styles.scrollView}>
@@ -89,10 +80,12 @@ export default class contactByType extends React.Component {
 
 
 const styles = StyleSheet.create({
-  body:{
-    marginTop:10,
-    height: 50,
-    alignItems: 'center'
+  scrollView: {
+    marginHorizontal: 20,
+  },
+  container: {
+    alignItems: 'center',
+    marginBottom: 10,
   },
   name:{
     fontSize:28,
@@ -104,25 +97,5 @@ const styles = StyleSheet.create({
     color: "#696969",
     fontWeight: "400",
     marginTop: 10
-  },
-
-  buttonContainer: {
-    marginTop:0,
-    height:70,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:5,
-    width:250,
-  },
-
-  scrollView: {
-    marginHorizontal: 20,
-  },
-  text: {
-    fontSize: 42,
-  },
-  container: {
-    // alignItems: 'center'
-    marginBottom: 10,
-  },
+  }
 });
