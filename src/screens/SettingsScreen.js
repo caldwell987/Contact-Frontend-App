@@ -196,6 +196,14 @@ export default class SettingsScreen extends React.Component {
             </Card>
 
 
+            <Card onPress={() => navigation.navigate('AddContactScreen', {userId: this.state.userId})} >
+              <Card.Title 
+                title="Add Contacts" 
+                subtitle="Add Contacts" 
+                left={(props) => <Avatar.Icon {...props} icon="power" />} 
+              />
+            </Card>
+
             <Card onPress={this._logout} >
               <Card.Title 
                 title="Logout" 

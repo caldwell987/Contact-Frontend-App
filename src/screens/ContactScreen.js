@@ -155,7 +155,7 @@ export default class ContactScreen extends React.Component {
                 </View>   */}
 
                 <View style={styles.buttonContainer}>
-                  <Button mode="outlined" onPress={() => Linking.openURL('https://we.tl/t-9EIpXBuOG1')} > Download </Button> 
+                  {/* <Button mode="outlined" onPress={() => Linking.openURL('https://we.tl/t-9EIpXBuOG1')} > Download </Button>  */}
                    {/* <Button mode="outlined" onPress={() => this.createVCard()} > Download </Button>  */}
                 </View>     
 

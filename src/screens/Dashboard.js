@@ -1,18 +1,23 @@
 import React, { memo } from 'react';
-import Icon from 'react-native-vector-icons/Ionicons'
+// import Icon from 'react-native-vector-icons/Ionicons'
 import { theme } from '../core/theme';
-import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
-import Button from '../components/Button';
-import { TextInput, Image, StyleSheet, Text, View, AsyncStorage} from 'react-native';
+import { Avatar, Title, Paragraph } from 'react-native-paper';
+// import Button from '../components/Button';
+import { Share, TouchableOpacity, StyleSheet, Text, View, AsyncStorage} from 'react-native';
+import IconFA from "react-native-vector-icons/FontAwesome";
 import axios from 'axios';
 import AllUsers from './AllUsers'
 import QRCode from 'react-native-qrcode-svg';
 import { SafeAreaView } from 'react-navigation';
 import ContactScreen from './ContactScreen';
+import { Card, CardItem, Button, Content, Body, Thumbnail, Footer, FooterTab, Icon, Image} from "native-base";
+
 
 
 
 export default class Dashboard extends React.Component {
+
+  svg;
 
   constructor() {
     super() 
@@ -42,7 +47,6 @@ export default class Dashboard extends React.Component {
 //  -------------------------------------- Collecting User Data --------------------------------------
 
   componentDidMount() {
-    console.log('2')
     const { navigation } = this.props;
     axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/logged_in", {withCredentials: true})
     .then(response => {
@@ -147,81 +151,96 @@ export default class Dashboard extends React.Component {
     });
   };
 
+
+  shareQrCode = (url, fileName) => {
+    fetch(url, {})
+        .then(response => response.blob())
+        .then(blob => URL.createObjectURL(blob))
+        .then(url => {
+            const tag = document.createElement("a");
+            tag.href = url;
+            tag.download = fileName;
+            document.body.appendChild(tag);
+            tag.click();
+            document.body.removeChild(tag);
+        });
+};
+
   //  -------------------------------------- Display Info --------------------------------------
 
   render() {
     console.disableYellowBox = true
     const { navigation } = this.props;
     let myURL = "https://powerful-sea-75935.herokuapp.com/connect/" + this.state.userId
-    // let logoFromFile = require('../assets/PersonLogo.png');
-    // console.log(myURL)
-    // console.log("helllo!!!!!!!!!!!!!!!!!!!")
-    // console.log(this.state.myContacts)
+
 
 
     return (
+      
       <View style={styles.container}>
 
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <Text style={styles.headerText}> Dashboard </Text>
           <Icon style={styles.headerIcon} onPress={() => navigation.navigate('SettingsScreen')} name="ios-settings" color="#ccc" size={30}/>
-        </View>
+        </View> */}
             {/* <Image style={styles.avatar} source={{uri: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'}}/> */}
         <View style={styles.body}>
           <View style={styles.bodyContent}>
 
 
-          <Card>
-            <Card.Title title="Card Title" subtitle="Card Subtitle" left={(props) => <Avatar.Icon {...props} icon="folder" />} />
+          <Card style={styles.mb}>
+            {/* <CardItem bordered>
+                <Thumbnail source={{uri: 'https://www.friendshipcircle.org/wp-content/uploads/2016/09/fake-logo.png'}} />
+                <Body style={styles.cardItemBody}>
+                  <Text style={styles.cardItemText}> My Contact Card </Text>
+                </Body>
+            </CardItem> */}
+
+            <CardItem style={styles.cardItem}>
+              <View style={styles.qrContainer}>
+                <Text style={styles.cardItemText}> Scan Me </Text>
+                  <TouchableOpacity >
+                    <QRCode
+                      value={myURL}
+                      size={230}
+                      color='#15317E'
+                      />
+                  </TouchableOpacity>
+                <Text style={styles.cardItemBottomText}> Stay Connected </Text>
+              </View>
+            </CardItem>
           </Card>
           
-          {/* <SafeAreaView> */}
-          <View style={styles.qrContainer}>
-            <QRCode
-                value={myURL}
-                size={200}
-                color='#15317E'
-                // backgroundColor='red'
-                // logo={logoFromFile}
-                // logoSize={40}
-                // logoBackgroundColor='white'
-                // logoBorderRadius={10}
-                // logoMargin={10}
-                />
-          </View>
-
-          <View style={styles.extraContainer}>
-              {/* <ContactScreen userId={this.state.userId} /> */}
-          </View>
+          {/* <View style={styles.extraContainer}>
+              <ContactScreen userId={this.state.userId} />
+          </View> */}
           {/* </SafeAreaView> */}
 
 
 
             {/* -------------------------------- Bottom Menu --------------------------------  */}
 
-            <View style={styles.footer} >
 
-            <View style={styles.footerIcon} >
-              <Icon 
-                style={styles.footerContent} 
-                onPress={() => navigation.navigate('Dashboard')} 
-                name="ios-home" color="#ccc" size={25}
-
-              />
-            </View>
-
-
-              <Icon 
-                style={styles.footerContent} 
-                onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})}
-                name="ios-contacts" color="#ccc" size={25}                 
-              />
-
-              <Icon style={styles.footerContent} onPress={() => navigation.navigate('SearchScreen')} name="ios-search" color="#ccc" size={25}/>
-              <Icon style={styles.footerContent} onPress={this._logout} name="ios-log-out" color="#ccc" size={25}/>
-              {/* <Button mode="outlined" style={styles.footerContent} onPress={this._logout}> LOGOUT </Button>  */}
-            </View>
-
+            <Content />
+                <Footer >
+                    <FooterTab>
+                        <Button>
+                            <Icon name='ios-home' />
+                        </Button>
+                        <Button>
+                            <Icon name='md-contacts' onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})}  />
+                        </Button>
+                        <Button>
+                            <IconFA style={styles.icon} name='plus' onPress={() => navigation.navigate('AddContactScreen', {userId: this.state.userId})}  />
+                        </Button>
+                        <Button>
+                            <Icon name='md-search' onPress={() => navigation.navigate('SearchScreen')} />
+                        </Button>
+                        <Button>
+                            <Icon name='md-settings' onPress={() => navigation.navigate('SettingsScreen')} />
+                        </Button>
+                    </FooterTab>
+                </Footer>
           </View>
         </View>
       </View>
@@ -239,6 +258,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     flex: 1
+  },
+  icon: {
+    color: "#8510d8",
+    fontSize: 34,
+    height: 35,
+    width: 35,
+    overflow: "visible"
   },
   header:{
     // flex: 1,
@@ -275,14 +301,62 @@ const styles = StyleSheet.create({
 
   body:{
     flex: 8,
-    marginTop:20,
+    marginTop:60,
+    // backgroundColor: 'red',
+    justifyContent: 'center',
+    // alignItems: 'center',
+  },
+
+  mb: {
+    marginTop: '30%',
+    marginBottom: '10%',
+    marginRight: '10%',
+    marginLeft: '10%',
+  },
+
+  cardItem: {
+    // height: 500,
+    height: 500,
+    borderColor: '#8510d8',
+    borderWidth: 5,
+    borderRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+
+  cardItemBody: {
+    alignItems: 'center',
+  },
+
+  cardItemText: {
+    marginBottom: 40,
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#8510d8',
+  },
+
+  cardItemBottomText: {
+    marginTop: 40,
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+
+  qrContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: '10%',
+    marginBottom: '10%'
   },
 
   bodyContent: {
     flex: 1,
-    // flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'center',
+    // alignItems: 'center',
+    // alignItems: 'center',
     // padding:10,
+    // backgroundColor: 'red',
     alignItems: 'stretch',
   },
 
@@ -307,34 +381,15 @@ const styles = StyleSheet.create({
     // borderColor: '#CFCDD7',
     // borderWidth: 1,
   },
-  qrContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // height: 200,
-    // width: 200,
-    // marginTop: 100,
-    // borderColor: 'red',
-    // borderWidth: 1,
-    // marginLeft: 100,
-},
 
 extraContainer: {
   flex: 1,
   backgroundColor: 'white',
   alignItems: 'center',
   justifyContent: 'center',
-  // height: 200,
-  // width: 200,
-  // marginTop: 100,
-  // borderColor: 'red',
-  // borderWidth: 1,
-  // marginLeft: 100,
 },
 qrCode: {
   backgroundColor: 'black',
-
 },
 
   footer: {

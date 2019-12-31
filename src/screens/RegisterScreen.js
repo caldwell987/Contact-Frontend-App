@@ -36,13 +36,13 @@ class RegisterScreen extends React.Component {
 
     const { username, password, passwordConfirmation, firstName, lastName } = this.state
     const { navigation } = this.props;
-    console.log("yo")
+    let usernameLowerCase = username.toLowerCase()
       console.log(password)
       console.log("First Name", firstName)
       console.log("Last Name", lastName)
       axios.post("https://powerful-sea-75935.herokuapp.com/api/v1/registrations", {
         user: {
-          username: username,
+          username: usernameLowerCase,
           password: password,
           password_confirmation: passwordConfirmation,
           firstname: firstName,
@@ -58,7 +58,7 @@ class RegisterScreen extends React.Component {
             this.props.home()
           }
           else {
-            console.log("RegisterScreen - handleSubmit - REG FAILED")
+            console.log("RegisterScreen - handleSubmit - REG FAILED", response)
             this.setState({
               registrationErrors: 'Username Or Password is Incorrect'
             })
@@ -72,6 +72,8 @@ class RegisterScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
+    let yo = this.state.username.toLowerCase()
+    console.log('line 77', yo)
 
       return (
         <Background>

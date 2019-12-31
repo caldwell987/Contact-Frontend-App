@@ -16,6 +16,7 @@ import {
   UserShowScreen,
   ContactScreen,
   SettingsScreen,
+  AddContactScreen,
 } from './screens';
 import { Component } from 'react';
 
@@ -33,6 +34,7 @@ const Router = createStackNavigator(
     UserShowScreen,
     ContactScreen,
     SettingsScreen,
+    AddContactScreen,
   },
   {
     // initialRouteName: 'HomeScreen',

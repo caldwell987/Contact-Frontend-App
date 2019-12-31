@@ -19,12 +19,13 @@ const PasswordInput = ({ errorText, ...props }) => (
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: '85%',
     marginVertical: 12,
     // borderWidth: 1,
   },
   input: {
-    backgroundColor: theme.colors.surface,
+    marginRight: 10,
+    // backgroundColor: theme.colors.surface,
   },
   error: {
     fontSize: 14,

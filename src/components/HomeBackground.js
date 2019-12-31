@@ -7,7 +7,7 @@ import {
 
 const HomeBackground = ({ children }) => (
   <ImageBackground
-    source={require('../assets/Background7.jpg')}
+    source={require('../assets/Background8.jpg')}
     style={styles.background}
   >
     <KeyboardAvoidingView style={styles.container} behavior="padding">

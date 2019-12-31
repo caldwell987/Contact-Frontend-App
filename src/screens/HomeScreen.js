@@ -1,17 +1,14 @@
 import React, { memo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import WhiteLogo from '../components/WhiteLogo';
+import { StyleSheet, View, Text } from 'react-native';
 import LoginScreenClass from './LoginScreenClass';
 import HomeBackground from '../components/HomeBackground';
-import HomeMenuHeader from '../components/HomeMenuHeader';
 import Button from '../components/Button';
 import { SafeAreaView } from 'react-navigation';
 import { RegisterScreen } from '.';
 import axios from 'axios';
-import Background from '../components/Background';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import BackButton from '../components/BackButton';
+import Icon from "react-native-vector-icons/FontAwesome";
+
 
 
 
@@ -74,14 +71,20 @@ class HomeScreen extends React.Component {
     const { navigation } = this.props;
 
 
+
     if (this.state.toggle === "one") {
      return (
       <HomeBackground >
-        <HomeMenuHeader />
+        {/* <HomeMenuHeader /> */}
         <View style={styles.viewContainer}>
-          <View style={styles.buttonContainer}> 
-            <Button 
-              mode="outlined"
+          <View style={styles.logoView}>
+            <WhiteLogo />
+            <Text style={styles.headerText} > Contact Card </Text>
+          </View>
+          {/* <View style={styles.buttonContainer}>  */}
+          {/* <WhiteLogo /> */}
+            {/* <Button 
+              // mode="outlined"
               style={styles.button} 
               onPress={this.logIn}>
               LOGIN
@@ -90,22 +93,32 @@ class HomeScreen extends React.Component {
 
           <View style={styles.buttonContainer}> 
             <Button 
-              mode="contained"
+              // mode="contained"
               style={styles.button} 
               onPress={this.signUp}>
-              SignUp
+              SignUp <Icon name='plus' onPress={() => navigation.navigate('SettingsScreen')} />
             </Button>
-          </View>
-          
-          {/* <View style={styles.buttonContainer}>
-            <Button
-              mode="contained"
-              style={styles.button} 
-              onPress={() => navigation.navigate('RegisterScreen', { userLoggedIn: (e) => this.userLoggedIn(e) })}
-              > Sign Up           
-          </Button>
-        </View> */}
+          </View> */}
+        </View>
 
+
+        <View style={styles.loginView}>
+            <View style={styles.buttonContainerOne}> 
+              <Button
+                style={styles.button} 
+                onPress={this.logIn}>
+                LOGIN
+              </Button>
+            </View>
+
+            <View style={styles.buttonContainer}> 
+              <Button 
+                // mode="contained"
+                style={styles.button} 
+                onPress={this.signUp}>
+                SignUp <Icon name='plus' onPress={() => navigation.navigate('SettingsScreen')} />
+              </Button>
+            </View>
         </View>
       </HomeBackground>
 
@@ -113,7 +126,7 @@ class HomeScreen extends React.Component {
   }
   else if(this.state.toggle === "two") { 
     return (
-      <LoginScreenClass 
+        <LoginScreenClass 
         home={this.home}
         checkLoginStatus={this.checkLoginStatus}
         user={this.state.user}
@@ -130,6 +143,7 @@ class HomeScreen extends React.Component {
   }
 
   }
+
 }
 
 export default HomeScreen;
@@ -137,10 +151,34 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   viewContainer: {
-    marginTop:'70%',
+    marginTop:'30%',
+    // marginTop: 30,
     flex: 0,
     padding: 0,
     width: '100%',
+    borderRadius: 50,
+    // maxWidth: 340,
+    // // alignSelf: 'center',
+    // // alignItems: 'center',
+    // // justifyContent: 'center',
+  },
+
+  headerText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    height: 60,
+    marginBottom: 20,
+    color: 'white',
+    // maxWidth: 340,
+    // // alignSelf: 'center',
+    // // alignItems: 'center',
+    // // justifyContent: 'center',
+  },
+
+  logoView: {
+    marginTop: 60,
+    // justifyContent: 'center',
+    alignItems: 'center',
     // maxWidth: 340,
     // // alignSelf: 'center',
     // // alignItems: 'center',
@@ -154,13 +192,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  buttonContainerOne: {
+    marginTop: '20%',
+    marginBottom: 5,
+    flex: 0,
+    height:60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   button: {
     justifyContent: 'center',
     width: '70%',
     alignItems: 'stretch',
     height:60,
-    // borderColor: '#CFCDD7',
-    // borderWidth: 1,
+    borderColor: 'white',
+    backgroundColor: '#8510d8',
+    borderRadius: 20,
+    
+    // 
+    borderWidth: 2,
+    
+  },
+
+  loginView: {
+    flex: 0,
+    borderRadius: 50,
+    // opacity: 0.42,
+    // marginRight: '7%',
+    // marginLeft: '7%',
+    marginTop: '40%',
+    backgroundColor: 'white',
+    height: '100%',
+    // width: '100%'    
   },
 
 })

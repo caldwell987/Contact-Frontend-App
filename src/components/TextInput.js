@@ -7,9 +7,9 @@ const TextInput = ({ errorText, ...props }) => (
   <View style={styles.container}>
     <Input
       style={styles.input}
-      // selectionColor={theme.colors.primary}
+      selectionColor={theme.colors.primary}
       underlineColor="transparent"
-      // mode="outlined"
+      mode="outlined"
       {...props}
     />
     {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
@@ -18,9 +18,9 @@ const TextInput = ({ errorText, ...props }) => (
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: '85%',
     marginVertical: 12,
-    borderBottomWidth: .5
+    // borderBottomWidth: .5
   },
   input: {
     backgroundColor: theme.colors.surface,

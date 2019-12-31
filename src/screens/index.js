@@ -10,6 +10,7 @@ export { default as NewContactScreen } from './NewContactScreen';
 export { default as UserShowScreen } from './UserShowScreen';
 export { default as ContactScreen } from './ContactScreen';
 export { default as SettingsScreen } from './SettingsScreen';
+export { default as AddContactScreen } from './AddContactScreen';
 
 
 
