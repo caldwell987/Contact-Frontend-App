@@ -80,6 +80,7 @@ class HomeScreen extends React.Component {
           <View style={styles.logoView}>
             <WhiteLogo />
             <Text style={styles.headerText} > Contact Card </Text>
+            <Text style={styles.sText} > Stay Connected </Text>
           </View>
           {/* <View style={styles.buttonContainer}>  */}
           {/* <WhiteLogo /> */}
@@ -116,7 +117,8 @@ class HomeScreen extends React.Component {
                 // mode="contained"
                 style={styles.button} 
                 onPress={this.signUp}>
-                SignUp <Icon name='plus' onPress={() => navigation.navigate('SettingsScreen')} />
+                SignUp 
+                {/* <Icon name='plus' onPress={() => navigation.navigate('SettingsScreen')} /> */}
               </Button>
             </View>
         </View>
@@ -167,7 +169,19 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     height: 60,
-    marginBottom: 20,
+    marginBottom: 5,
+    color: 'white',
+    // maxWidth: 340,
+    // // alignSelf: 'center',
+    // // alignItems: 'center',
+    // // justifyContent: 'center',
+  },
+
+  sText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    height: 30,
+    marginBottom: 10,
     color: 'white',
     // maxWidth: 340,
     // // alignSelf: 'center',
@@ -176,7 +190,7 @@ const styles = StyleSheet.create({
   },
 
   logoView: {
-    marginTop: 60,
+    marginTop: 70,
     // justifyContent: 'center',
     alignItems: 'center',
     // maxWidth: 340,

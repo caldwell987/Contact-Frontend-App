@@ -167,6 +167,15 @@ export default class SettingsScreen extends React.Component {
 
             {/* -------------------------------- View Contacts --------------------------------  */}
 
+
+            <Card onPress={() => navigation.navigate('AddContactScreen', {userId: this.state.userId})} >
+              <Card.Title 
+                title="Add Contacts" 
+                subtitle="Add Contacts" 
+                left={(props) => <Avatar.Icon {...props} icon="power" />} 
+              />
+            </Card>
+
             <Card onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})} >
               <Card.Title 
                 title="My Profile" 
@@ -180,8 +189,8 @@ export default class SettingsScreen extends React.Component {
 
             <Card onPress={() => navigation.navigate('NewContactScreen', {userId: this.state.userId})} >
               <Card.Title 
-                title="Add Connection" 
-                subtitle="Add a Connection to Share" 
+                title="Edit Profile" 
+                subtitle="Edit Your Details" 
                 left={(props) => <Avatar.Icon {...props} icon="plus" />} 
               />
             </Card>
@@ -189,20 +198,28 @@ export default class SettingsScreen extends React.Component {
 
             <Card onPress={() => navigation.navigate('DeleteContact', {userId: this.state.userId})} >
               <Card.Title 
-                title="Remove Connection" 
-                subtitle="Remove a Connection From Your List" 
+                title="FAQ" 
+                subtitle="Frequently Asked Questions" 
                 left={(props) => <Avatar.Icon {...props} icon="minus" />} 
               />
             </Card>
 
-
-            <Card onPress={() => navigation.navigate('AddContactScreen', {userId: this.state.userId})} >
+            <Card onPress={() => navigation.navigate('DeleteContact', {userId: this.state.userId})} >
               <Card.Title 
-                title="Add Contacts" 
-                subtitle="Add Contacts" 
-                left={(props) => <Avatar.Icon {...props} icon="power" />} 
+                title="Private Policy" 
+                subtitle="View Our Private Policy" 
+                left={(props) => <Avatar.Icon {...props} icon="minus" />} 
               />
             </Card>
+
+            <Card onPress={() => navigation.navigate('DeleteContact', {userId: this.state.userId})} >
+              <Card.Title 
+                title="Contact Us" 
+                subtitle="Have Questions or Concerns? Contact Us" 
+                left={(props) => <Avatar.Icon {...props} icon="minus" />} 
+              />
+            </Card>
+
 
             <Card onPress={this._logout} >
               <Card.Title 
