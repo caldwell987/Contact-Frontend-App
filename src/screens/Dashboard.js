@@ -1,23 +1,13 @@
 import React, { memo } from 'react';
-// import Icon from 'react-native-vector-icons/Ionicons'
-import { theme } from '../core/theme';
-import { Avatar, Title, Paragraph } from 'react-native-paper';
-// import Button from '../components/Button';
-import { Share, TouchableOpacity, StyleSheet, Text, View, AsyncStorage} from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { Card, CardItem, Content, Button, Footer, FooterTab, Icon} from "native-base";
+import QRCode from 'react-native-qrcode-svg';
 import IconFA from "react-native-vector-icons/FontAwesome";
 import axios from 'axios';
-import AllUsers from './AllUsers'
-import QRCode from 'react-native-qrcode-svg';
-import { SafeAreaView } from 'react-navigation';
-import ContactScreen from './ContactScreen';
-import { Card, CardItem, Button, Content, Body, Thumbnail, Footer, FooterTab, Icon, Image} from "native-base";
-
-
+import DashboardBackground from '../components/DashboardBackground';
 
 
 export default class Dashboard extends React.Component {
-
-  svg;
 
   constructor() {
     super() 
@@ -37,7 +27,6 @@ export default class Dashboard extends React.Component {
       myContacts: [],
       myContactsCopy: []
     }
-    // this.addedContactUpdated = this.addedContactUpdated.bind(this)
     this.toggleContacts = this.toggleContacts.bind(this)
     this.toggleAddContact = this.toggleAddContact.bind(this)
     this.toggleDeleteContact = this.toggleDeleteContact.bind(this)
@@ -45,7 +34,7 @@ export default class Dashboard extends React.Component {
 
 
 //  -------------------------------------- Collecting User Data --------------------------------------
-
+  
   componentDidMount() {
     const { navigation } = this.props;
     axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/logged_in", {withCredentials: true})
@@ -76,9 +65,8 @@ export default class Dashboard extends React.Component {
     })
   }
 
-
   //  -------------------------------------- Logging Out --------------------------------------
-
+  
   _logout = async() => {
 
     console.log("Dashboard - _logout")
@@ -110,7 +98,6 @@ export default class Dashboard extends React.Component {
 
    //  -------------------------------------- My Contacts --------------------------------------
 
-
    MyContactsFunc(userId) {
      console.log('yo')
     axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/user_id/" + userId, )
@@ -123,9 +110,7 @@ export default class Dashboard extends React.Component {
     })
   }
 
-
  //  -------------------------------------- Toggle --------------------------------------
-
 
   toggleContacts() {
     this.setState({
@@ -164,101 +149,151 @@ export default class Dashboard extends React.Component {
             tag.click();
             document.body.removeChild(tag);
         });
-};
+  };
 
   //  -------------------------------------- Display Info --------------------------------------
 
+
   render() {
+
     console.disableYellowBox = true
     const { navigation } = this.props;
     let myURL = "https://powerful-sea-75935.herokuapp.com/connect/" + this.state.userId
 
-
-
     return (
       
-      <View style={styles.container}>
-
-        {/* <View style={styles.header}>
-          <Text style={styles.headerText}> Dashboard </Text>
-          <Icon style={styles.headerIcon} onPress={() => navigation.navigate('SettingsScreen')} name="ios-settings" color="#ccc" size={30}/>
-        </View> */}
-            {/* <Image style={styles.avatar} source={{uri: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'}}/> */}
+      <DashboardBackground>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
 
+            <Card style={styles.headerCard}>
+              <CardItem style={styles.headerCardItem}>
+                <Text style={styles.headerText}> {this.state.firstName} {this.state.lastName} </Text>
+              </CardItem>
+            </Card>
 
-          <Card style={styles.mb}>
-            {/* <CardItem bordered>
-                <Thumbnail source={{uri: 'https://www.friendshipcircle.org/wp-content/uploads/2016/09/fake-logo.png'}} />
-                <Body style={styles.cardItemBody}>
-                  <Text style={styles.cardItemText}> My Contact Card </Text>
-                </Body>
-            </CardItem> */}
-
-            <CardItem style={styles.cardItem}>
-              <View style={styles.qrContainer}>
-                <Text style={styles.cardItemText}> Scan Me </Text>
-                  <TouchableOpacity >
-                    <QRCode
-                      value={myURL}
-                      size={230}
-                      color='#15317E'
+            <Card style={styles.mb}>
+              <CardItem style={styles.cardItem}>
+                  {/* <Text style={styles.cardItemText}> Scan Me </Text> */}
+                    <TouchableOpacity >
+                      <QRCode
+                        value={myURL}
+                        size={230}
+                        color='black'
+                        backgroundColor='transparent'
                       />
-                  </TouchableOpacity>
-                <Text style={styles.cardItemBottomText}> Stay Connected </Text>
-              </View>
-            </CardItem>
-          </Card>
-          
-          {/* <View style={styles.extraContainer}>
-              <ContactScreen userId={this.state.userId} />
-          </View> */}
-          {/* </SafeAreaView> */}
-
-
+                    </TouchableOpacity>
+                  {/* <Text style={styles.cardItemBottomText}> Stay Connected </Text> */}
+              </CardItem>
+            </Card>
 
             {/* -------------------------------- Bottom Menu --------------------------------  */}
 
-
-            <Content />
-                <Footer >
-                    <FooterTab>
-                        <Button>
-                            <Icon name='ios-home' />
-                        </Button>
-                        <Button>
-                            <Icon name='md-contacts' onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})}  />
-                        </Button>
-                        <Button>
-                            <IconFA style={styles.icon} name='plus' onPress={() => navigation.navigate('AddContactScreen', {userId: this.state.userId})}  />
-                        </Button>
-                        <Button>
-                            <Icon name='md-search' onPress={() => navigation.navigate('SearchScreen')} />
-                        </Button>
-                        <Button>
-                            <Icon name='md-settings' onPress={() => navigation.navigate('SettingsScreen')} />
-                        </Button>
-                    </FooterTab>
-                </Footer>
+            <Content/>
+            <Footer>
+              <FooterTab>
+                <Button>
+                  <Icon name='ios-home' />
+                </Button>
+                <Button>
+                  <Icon name='md-contacts' onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})}  />
+                </Button>
+                <Button>
+                  <IconFA style={styles.icon} name='plus' onPress={() => navigation.navigate('AddContactScreen', {userId: this.state.userId})}  />
+                </Button>
+                <Button>
+                  <Icon name='md-search' onPress={() => navigation.navigate('SearchScreen')} />
+                </Button>
+                <Button>
+                  <Icon name='md-settings' onPress={() => navigation.navigate('SettingsScreen')} />
+                </Button>
+              </FooterTab>
+            </Footer>
           </View>
         </View>
-      </View>
-    
+      </DashboardBackground>
     )
   }
 }
 
 
-
 //  -------------------------------------- Styling  --------------------------------------
 
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    flex: 1
+
+  body:{
+    flex: 8,
+    marginTop:60,
   },
+
+  bodyContent: {
+    flex: 1,
+  },
+
+  headerCard: {
+    marginTop: 25,
+    marginBottom: 5,
+    marginRight: '10%',
+    marginLeft: '10%',
+    borderRadius: 30,
+    backgroundColor: '#00000000'
+  },
+
+  headerCardItem: {
+    height: 100,
+    justifyContent: 'center',
+    borderColor: 'white',
+    borderWidth: 5,
+    borderRadius: 30,
+    shadowOffset: { width: 3, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 3,
+    backgroundColor: 'white',
+    // backgroundColor: '#00000000'
+  },
+
+
+  headerText: {
+    height: 60,
+    marginTop: 30,
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+
+  mb: {
+    marginTop: '2%',
+    marginBottom: '10%',
+    marginRight: '10%',
+    marginLeft: '10%',
+    // backgroundColor: 'white',
+    backgroundColor: '#00000000',
+    borderRadius: 30,
+  },
+
+  cardItem: {
+    height: 350,
+    justifyContent: 'center',
+    borderColor: 'white',
+    borderWidth: 5,
+    borderRadius: 30,
+    shadowOffset: { width: 3, height: 8 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 3,
+    backgroundColor: 'white',
+    opacity: .9,
+    // backgroundColor: '#00000000'
+  },
+
+  cardItemText: {
+    marginBottom: 40,
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+
   icon: {
     color: "#8510d8",
     fontSize: 34,
@@ -266,164 +301,5 @@ const styles = StyleSheet.create({
     width: 35,
     overflow: "visible"
   },
-  header:{
-    // flex: 1,
-    // flexDirection: 'row',
-    backgroundColor: "white",
-    height:100,
-    alignItems: 'center',
-    borderBottomColor: '#DFDCEC',
-    borderBottomWidth: 1.5,
-  },
-
-  headerText:{
-    flex: 1,
-    flexDirection: 'row',
-    alignSelf:'center',
-    position: 'absolute',
-    color: "#00BFFF",
-    marginTop:60,
-    fontSize: 20,
-    color: 'black',
-    fontFamily: 'GillSans-SemiBold'
-  },
-
-  headerIcon:{
-    flex: 1,
-    flexDirection: 'row',
-    alignSelf:'flex-end',
-    marginRight: 30,
-    // position: 'right',
-    color: 'black',
-    marginTop:55,
-    height: 50
-  },
-
-  body:{
-    flex: 8,
-    marginTop:60,
-    // backgroundColor: 'red',
-    justifyContent: 'center',
-    // alignItems: 'center',
-  },
-
-  mb: {
-    marginTop: '30%',
-    marginBottom: '10%',
-    marginRight: '10%',
-    marginLeft: '10%',
-  },
-
-  cardItem: {
-    // height: 500,
-    height: 500,
-    borderColor: '#8510d8',
-    borderWidth: 5,
-    borderRadius: 10,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-
-  cardItemBody: {
-    alignItems: 'center',
-  },
-
-  cardItemText: {
-    marginBottom: 40,
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#8510d8',
-  },
-
-  cardItemBottomText: {
-    marginTop: 40,
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-
-  qrContainer: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: '10%',
-    marginBottom: '10%'
-  },
-
-  bodyContent: {
-    flex: 1,
-    justifyContent: 'center',
-    // alignItems: 'center',
-    // alignItems: 'center',
-    // padding:10,
-    // backgroundColor: 'red',
-    alignItems: 'stretch',
-  },
-
-  buttonContainer: {
-    // flex: 1,
-    // flexDirection: 'row',
-    alignItems: 'stretch',
-    marginTop:0,
-    height:100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:15,
-    padding: 20
-  },
-  button: {
-    alignItems: 'stretch',
-    margin: 10,
-    height:100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:5,
-    // borderColor: '#CFCDD7',
-    // borderWidth: 1,
-  },
-
-extraContainer: {
-  flex: 1,
-  backgroundColor: 'white',
-  alignItems: 'center',
-  justifyContent: 'center',
-},
-qrCode: {
-  backgroundColor: 'black',
-},
-
-  footer: {
-    flex: 1,
-    flexDirection: 'row',
-    width: '100%',
-    height: 70,
-    backgroundColor: "white",
-    justifyContent: 'center',
-    // alignItems: 'center',
-    position: 'absolute', //Here is the trick
-    bottom: 0,
-    alignItems: 'stretch',
-    borderTopColor: '#DFDCEC',
-    borderTopWidth: 1.5,
-    // padding: 10,
-  },
-
-  footerContent: {
-    // flex: 0,
-    flexDirection: 'row',
-    // padding: 20,
-    marginRight: 30,
-    marginLeft: 30,
-    marginTop: 20,
-    borderRightColor: '#DFDCEC',
-    borderRightWidth: 1.5,
-    alignItems: 'stretch',
-    alignItems: 'center',
-    height: 50,
-  }
-
 });
 
-
-
-// export default Dashboard(TabNavigator)

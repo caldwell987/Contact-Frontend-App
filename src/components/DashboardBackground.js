@@ -8,31 +8,23 @@ import {
 const DashboardBackground = ({ children }) => (
   <ImageBackground
     source={require('../assets/Background8.jpg')}
-    // style={styles.background}
+    style={styles.background}
   >
-    {/* <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       {children}
-    </KeyboardAvoidingView> */}
+    </KeyboardAvoidingView>
   </ImageBackground>
 );
 
 const styles = StyleSheet.create({
   background: {
-    // alignSelf: 'center',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // width: '100%',
-    // height: '100%',
+    width: '100%',
+    height: '100%',
   },
   container: {
-    // flex: 1,
-    // padding: 0,
-    // width: '100%',
-    // maxWidth: 340,
-    // alignSelf: 'center',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    flex: 1
   },
+
 });
 
 export default memo(DashboardBackground);

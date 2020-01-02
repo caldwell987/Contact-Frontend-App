@@ -2,19 +2,15 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { View, ActivityIndicator, StatusBar, StyleSheet, AsyncStorage} from 'react-native';
-
-
 import {
   HomeScreen,
-  LoginScreenClass,
-  RegisterScreen,
-  ForgotPasswordScreen,
   Dashboard,
-  SearchScreen,
-  DeleteContact,
-  NewContactScreen,
-  UserShowScreen,
   ContactScreen,
+  LoginScreenClass,
+  SignupScreen,
+  NewContactScreen,
+  SearchScreen,
+  UserShowScreen,
   SettingsScreen,
   AddContactScreen,
 } from './screens';
@@ -26,13 +22,11 @@ const Router = createStackNavigator(
     // HomeScreen,
     Dashboard,
     LoginScreenClass,
-    RegisterScreen,
-    ForgotPasswordScreen,
+    SignupScreen,
     SearchScreen,
-    DeleteContact,
+    ContactScreen,
     NewContactScreen,
     UserShowScreen,
-    ContactScreen,
     SettingsScreen,
     AddContactScreen,
   },
@@ -45,7 +39,7 @@ const Router = createStackNavigator(
 const AuthStack = createStackNavigator({HomeScreen}, {
     // initialRouteName: 'HomeScreen',
     headerMode: 'none',
-  }, {RegisterScreen})
+  }, {SignupScreen})
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {

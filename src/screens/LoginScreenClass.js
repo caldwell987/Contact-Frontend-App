@@ -1,42 +1,35 @@
 import React, { memo, useState } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, AsyncStorage, ActivityIndicator, } from 'react-native';
 import HomeBackground from '../components/HomeBackground';
-import Logo from '../components/Logo';
-import Header from '../components/Header';
 import Button from '../components/Button';
 import UsernameInput from '../components/UsernameInput';
 import PasswordInput from '../components/PasswordInput';
 import TextInput from '../components/TextInput';
-// import PasswordInput from '../components/PasswordInputText';
 import BackButton from '../components/BackButton';
 import { theme } from '../core/theme';
-import { usernameValidator, passwordValidator } from '../core/utils';
 import axios from 'axios';
 
 export default class LoginScreenClass extends React.Component {
 
   constructor(props) {
-
     super(props) 
-
     this.state = {
       username: "",
       password: '',
       loginError: '',
-      user: this.props.user
+      user: this.props.user, 
+      spinner: false
     }
-
     this.handleLogin = this.handleLogin.bind(this)
     this._login = this._login.bind(this)
-
   }
 
-  
   handleLogin() {
-    console.log("LoginScreen - handleLogin")
+    this.setState({
+      spinner: true
+    })
     const { username, password } = this.state
     let usernameLowerCase = username.toLowerCase()
-    console.log(password)
     axios.post("https://powerful-sea-75935.herokuapp.com/api/v1/sessions", {
       user: {
           username: usernameLowerCase,
@@ -48,11 +41,15 @@ export default class LoginScreenClass extends React.Component {
     .then(response => {
         if (response.data.logged_in) {
           this._login(response)
+          this.setState({
+            spinner: false
+          })
         }
         else {
           console.log("LoginScreen - handleLogin - Login Failed")
           this.setState({
-            loginError: 'Username Or Password is Incorrect'
+            loginError: 'Username Or Password is Incorrect',
+            spinner: false
           })
         }
     })
@@ -79,6 +76,12 @@ export default class LoginScreenClass extends React.Component {
 
           <Text>{this.state.loginError}</Text>
 
+          {this.state.spinner && 
+
+          <View style={[styles.container, styles.horizontal]}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>}
+
           <View style={styles.inputContainer}>
 
             <UsernameInput
@@ -103,6 +106,7 @@ export default class LoginScreenClass extends React.Component {
               placeholder="Password"
               placeholderTextColor="rgba(230, 230, 230,1)"
               returnKeyType="done"
+              secureTextEntry={true} 
               value={this.state.password}
               onChangeText={(password) => this.setState({password})}
               autoCapitalize="none"
@@ -112,44 +116,40 @@ export default class LoginScreenClass extends React.Component {
               clearButtonMode="while-editing"
             />
           </View>
-
-          <View style={styles.forgotPassword}>
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')}></TouchableOpacity>
-          </View>
-
           <View style={styles.buttonContainer}> 
               <Button 
                 style={styles.button} 
                 onPress={this.handleLogin}>
                 Login 
               </Button>
-
               <Text style={styles.label}>Don’t have an account? </Text>
-              <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+              <TouchableOpacity onPress={() => this.props.signUp()}>
                 <Text style={styles.link}>Sign up</Text>
               </TouchableOpacity>
-
             </View>
         </View>
       </ HomeBackground>
     );
   }
 
-    _login = async(response) => {
-      const { navigation } = this.props;
-      console.log("LoginScreen - _login- IsLoggedIN")
-      await AsyncStorage.setItem('isLoggedIn', '1')
-      navigation.navigate('Dashboard');
-      this.props.checkLoginStatus()
-    }
+  _login = async(response) => {
+    const { navigation } = this.props;
+    console.log("LoginScreen - _login- IsLoggedIN")
+    await AsyncStorage.setItem('isLoggedIn', '1')
+    navigation.navigate('Dashboard');
+    this.props.checkLoginStatus()
+  }
+
 };
 
 const styles = StyleSheet.create({
+
   forgotPassword: {
     width: '100%',
     alignItems: 'flex-end',
     marginBottom: 24,
   },
+
   viewContainer: {
     marginTop:'70%',
     flex: 0,
@@ -162,18 +162,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 60,
     color: 'white'
-    // maxWidth: 340,
-    // // alignSelf: 'center',
-    // // alignItems: 'center',
-    // // justifyContent: 'center',
   },
+
   inputContainer: {
     marginBottom:15,
     height:60,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'black'
   },
+
   buttonContainer: {
     marginTop:50,
     marginBottom:30,
@@ -203,16 +200,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 4,
   },
+
   label: {
     marginTop: 20,
     color: theme.colors.secondary,
   },
+
   link: {
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+
   passwordInput: {
     margin: 20,
-  },
+  }
+
 });
 

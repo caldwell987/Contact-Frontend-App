@@ -1,18 +1,14 @@
 import React, { memo } from 'react';
-import Button from '../components/Button';
-import { TouchableOpacity, Image, StyleSheet, View, Linking, Alert, ScrollView} from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
-import { Container, Content, List, ListItem, Text, Input } from 'native-base';
+import { Container, Content, List, ListItem, Text } from 'native-base';
 import axios from 'axios';
 import { Avatar} from 'react-native-paper';
 import AddPhone from './AddPhone'
-import Constants from 'expo-constants';
-import BackButton from '../components/BackButton';
-
-
 
 export default class AddContactScreen extends React.Component {
-userId;
+
+  userId;
   constructor(props) {
     super(props) 
     this.state = {
@@ -45,27 +41,20 @@ userId;
      this.updateContacts = this.updateContacts.bind(this)
   }
 
-  //  -------------------------------------- Contact By Type--------------------------------------
-
-
   componentDidMount() {
     const { navigation } = this.props;
     userId = navigation.getParam('userId')
-    // console.log("DeleteContact UserId ", userId)
     axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/user_id/" + userId, )
     .then(response => { 
       this.setState({
         myContacts: response.data.contacts,
         myContactsCopy: response.data.contacts
       }, () => this.sortByType())
-      // console.log("Dashboard - myContactsFunc - Users Contacts", this.state.myContacts)
     })
   }
 
   sortByType() {
     let contacts = this.state.myContacts;
-    // console.log("ContactByType - Render - contacts ", contacts)
-
     let phone = contacts.filter(contact => contact.kind == "Phone");
     let workPhone = contacts.filter(contact => contact.kind == "Work Phone");
     let homePhone = contacts.filter(contact => contact.kind == "Home Phone");
@@ -76,8 +65,6 @@ userId;
     let title = contacts.filter(contact => contact.kind == "Title");
     let LinkedIn = contacts.filter(contact => contact.kind == "Linkedin");
     let Facebook = contacts.filter(contact => contact.kind == "Facebook");
-
-    
 
     this.setState({
       phone: phone,
@@ -90,17 +77,14 @@ userId;
       title: title,
       linkedIn: LinkedIn,
       facebook: Facebook,
-    }
-    );
+    });
   }
 
   delete(id) {
-    const { navigation } = this.props;
     let contactId = id
-    // console.log("delete", contactId)
     Alert.alert(
       "Are You Sure?",
-      'Keep your app up to date to enjoy the latest features',
+      'Press Delete to Delete',
       [
         {
           text: 'Cancel',
@@ -120,7 +104,6 @@ userId;
         },
       ],
     );
-
   }
 
   togglePhone() {
@@ -181,27 +164,23 @@ userId;
     }, () => this.sortByType() )
   }
 
-
-
   //  -------------------------------------- Display Info --------------------------------------
 
   render() {
-
     const { navigation } = this.props;
 
     return (
 
       <Container style={styles.container}>
-
         <View style={styles.header}>
           <Text style={styles.headerText}> Contacts </Text>
+          <Icon style={styles.headerIcon} onPress={() => this.props.navigation.goBack()} name="ios-arrow-round-back" color="#ccc" size={30}/>
         </View>
 
         <Content style={styles.content}>
           <List>
-
-
-    {/* ---------------------------------------------- Cell Phone ----------------------------------------------  */}
+    
+    {/*--------- Cell Phone --------- */}
 
               <ListItem itemDivider>
                   <Text>Phone</Text>
@@ -224,7 +203,7 @@ userId;
                   <Text>  Add Phone </Text>
                 </ListItem>
 
-  {/* ---------------------------------------------- Work Phone ----------------------------------------------  */}
+    {/* --------- Work Phone --------- */}
 
               <ListItem itemDivider>
                   <Text>Work Phone</Text>
@@ -248,7 +227,7 @@ userId;
                 </ListItem>
 
 
-  {/* ---------------------------------------------- Home Phone ----------------------------------------------  */}
+    {/* ----------  Home Phone ---------  */}
 
 
               <ListItem itemDivider>
@@ -275,7 +254,6 @@ userId;
 
   {/* ---------------------------------------------- Email ----------------------------------------------  */}
 
-
               <ListItem itemDivider>
                   <Text> Email </Text>
               </ListItem>
@@ -299,7 +277,6 @@ userId;
 
 
   {/* ---------------------------------------------- Work Email ----------------------------------------------  */}
-  
 
               <ListItem itemDivider>
                   <Text> Work Email </Text>
@@ -325,7 +302,6 @@ userId;
 
     {/* ---------------------------------------------- Website ----------------------------------------------  */}
   
-
               <ListItem itemDivider>
                   <Text> Website</Text>
               </ListItem>
@@ -349,7 +325,6 @@ userId;
 
 
   {/* ---------------------------------------------- Org ----------------------------------------------  */}
- 
 
               <ListItem itemDivider>
                   <Text> Organization </Text>
@@ -406,29 +381,21 @@ userId;
   }
 }
 
-
-
-
-//  -------------------------------------- Styling  --------------------------------------
-
-
 const styles = StyleSheet.create({
   
   container: {
-    // alignItems: 'center'
-    // marginTop: 20,
   },
+
   input: {
     fontSize: 16,
     height: 25
   },
+
   content: {
-    // alignItems: 'center'
     marginTop: 0,
   },
+
   header:{
-    // flex: 1,
-    // flexDirection: 'row',
     backgroundColor: "white",
     height:100,
     alignItems: 'center',
@@ -451,23 +418,24 @@ const styles = StyleSheet.create({
   headerIcon:{
     flex: 1,
     flexDirection: 'row',
-    alignSelf:'flex-end',
-    marginRight: 30,
-    // position: 'right',
+    alignSelf:'flex-start',
+    marginLeft: 30,
     color: 'black',
     marginTop:55,
     height: 50
   },
+
   body:{
     marginTop:80,
     height: 50,
     alignItems: 'center'
   },
+
   bodyContent: {
-    // flex: 1,
     alignItems: 'center',
     padding:30,
   },
+
   nameContainer: {
     marginTop:0,
     height:30,
@@ -476,27 +444,25 @@ const styles = StyleSheet.create({
     marginBottom:20,
     width:250,
   },
+
   name:{
     fontSize:28,
     color: "black",
     fontWeight: "600"
   },
+
   contactContent: {
-    // flex: 1,
     alignItems: 'center',
     height: 500,
     width: 500,
     marginTop: 10,
     marginBottom: 20
   },
+
   contacts:{
-    // fontSize:20,
-    // color: "#696969",
-    // fontWeight: "400",
-    // marginTop: 20
-    // marginTop: 10,
-    // marginBottom: 10
+
   },
+
   buttonContainer: {
     marginTop:0,
     height:70,
@@ -505,85 +471,13 @@ const styles = StyleSheet.create({
     marginBottom:5,
     width:250,
   },
+
   scrollView: {
     marginHorizontal: 20,
   },
+
   centerContacts: {
     alignItems: 'center'
   }
-});
-
-
-
-
-
-
-// <ScrollView style={styles.scrollView}>
-// <View style={styles.container}>
-//     <Text style={styles.name} > Delete Contacts  </Text>
-//         {this.state.phone.map(phone => <Text style={styles.contacts} key={phone.id} onPress={() => this.delete(phone.id)} > Phone: {phone.value} </Text> )}
-//         {this.state.email.map(email => <Text style={styles.contacts} key={email.id} onPress={() => this.delete(email.id)} > Email: {email.value} </Text> )}
-//         {this.state.website.map(website => <Text style={styles.contacts} key={website.id} onPress={() => this.delete(website.id)} > Website: {website.value} </Text> )}
-//         {this.state.instagram.map(instagram => <Text style={styles.contacts} key={instagram.id} onPress={() => this.delete()} > Instagram: {instagram.value} </Text> )}
-// </View>
-// </ScrollView>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- // <View style={styles.container}>
-      //   <BackButton goBack={() => navigation.navigate('SettingsScreen')} />
-      //       <View style={styles.body}>
-      //         <View style={styles.bodyContent}>
-      //           <View style={styles.nameContainer}>
-      //           <Text style={styles.name} > Delete Contact </Text>
-      //           </View>   
-
-      //           <View style={styles.contactContent}>
-      //             <ScrollView style={styles.scrollView}>
-      //               <View style={styles.centerContacts} >
-      //                 <Text> Phone: </Text>
-      //                 {this.state.phone.map(phone => <Text style={styles.contacts} key={phone.id} onPress={() => this.delete(phone.id)} > {phone.value} </Text> )}
-      //                 <Text> Work Phone: </Text>
-      //                 {this.state.workPhone.map(workPhone => <Text style={styles.contacts} key={workPhone.id} onPress={() => this.delete(workPhone.id)} > {workPhone.value} </Text> )}
-      //                 <Text> Home Phone: </Text>
-      //                 {this.state.homePhone.map(homePhone => <Text style={styles.contacts} key={homePhone.id} onPress={() => this.delete(homePhone.id)} > {homePhone.value} </Text> )}
-      //                 <Text> Personal Email: </Text>
-      //                 {this.state.email.map(email => <Text style={styles.contacts} key={email.id} onPress={() => this.delete(email.id)} > {email.value} </Text> )}
-      //                 <Text> Work Email: </Text>
-      //                 {this.state.workEmail.map(workEmail => <Text style={styles.contacts} key={workEmail.id} onPress={() => this.delete(workEmail.id)} > {workEmail.value} </Text> )}
-      //                 <Text> Website: </Text>
-      //                 {this.state.website.map(website => <Text style={styles.contacts} key={website.id} onPress={() => this.delete(website.id)} > {website.value} </Text> )}
-      //                 <Text> Organization: </Text>
-      //                 {this.state.organization.map(organization => <Text style={styles.contacts} key={organization.id} onPress={() => this.delete(organization.id)} > {organization.value} </Text> )}
-      //                 <Text> Work Title: </Text>
-      //                 {this.state.title.map(title => <Text style={styles.contacts} key={title.id} onPress={() => this.delete(title.id)} > {title.value} </Text> )}
-      //                 {/* <Text style={styles.contacts} key={this.state.organization.id} onPress={() => this.delete(this.state.organization.id)} > Organization: {this.state.organization.value} </Text>  */}
-      //                 {/* <Text style={styles.contacts} key={this.state.title.id} onPress={() => this.delete(this.state.title.id)} > Title: {this.state.title.value} </Text>  */}
-      //                 {/* {this.state.linkedIn.map(linkedIn => <Text style={styles.contacts} key={linkedIn.id} onPress={() => this.delete()} > Linkedin: {linkedIn.value} </Text> )} */}
-      //                 {/* {this.state.facebook.map(facebook => <Text style={styles.contacts} key={facebook.id} onPress={() => this.delete()} > Facebook: {facebook.value} </Text> )} */}
-      //               </View>
-      //             </ScrollView>
-      //           </View> 
-
-                
-      //           {/* -------------------------------- NAV --------------------------------  */}
   
-
-      //           <View style={styles.buttonContainer}>
-      //             <Button mode="outlined" onPress={() => navigation.navigate('Dashboard')}> HOME </Button> 
-      //           </View>      
-      //       </View>
-      //     </View>
-      //   </View>
+});

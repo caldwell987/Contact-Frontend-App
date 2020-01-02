@@ -1,14 +1,10 @@
 import React, { memo } from 'react';
-// import Button from '../components/Button';
-import { TouchableOpacity, Image, StyleSheet, Text, View, AsyncStorage} from 'react-native';
+import { StyleSheet, Text, View, AsyncStorage} from 'react-native';
+import { Button, Footer, FooterTab, Icon} from "native-base";
 import axios from 'axios';
-import AllUsers from './AllUsers'
-import { theme } from '../core/theme';
-import Icon from 'react-native-vector-icons/Ionicons'
-import { Avatar, Card, Title, Paragraph, Button } from 'react-native-paper';
-
-
-
+import IonIcon from 'react-native-vector-icons/Ionicons'
+import { Avatar, Card } from 'react-native-paper';
+import IconFA from "react-native-vector-icons/FontAwesome";
 
 export default class SettingsScreen extends React.Component {
 
@@ -30,17 +26,14 @@ export default class SettingsScreen extends React.Component {
       myContacts: [],
       myContactsCopy: []
     }
-    // this.addedContactUpdated = this.addedContactUpdated.bind(this)
     this.toggleContacts = this.toggleContacts.bind(this)
     this.toggleAddContact = this.toggleAddContact.bind(this)
     this.toggleDeleteContact = this.toggleDeleteContact.bind(this)
   }
 
-
 //  -------------------------------------- Collecting User Data --------------------------------------
 
   componentDidMount() {
-    console.log('2')
     const { navigation } = this.props;
     axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/logged_in", {withCredentials: true})
     .then(response => {
@@ -70,25 +63,16 @@ export default class SettingsScreen extends React.Component {
     })
   }
 
-
   //  -------------------------------------- Logging Out --------------------------------------
 
   _logout = async() => {
-
-    console.log("Dashboard - _logout")
-
     const { navigation } = this.props;
-
     await AsyncStorage.clear()
-      navigation.navigate('HomeScreen')
-    
-      this.clearSession()
-      
+    navigation.navigate('HomeScreen')
+    this.clearSession()
   }
 
   clearSession() {
-    console.log("Dashboard - clearSession")
-
     axios.delete("https://powerful-sea-75935.herokuapp.com/api/v1/logout", {withCredentials: true}).then(response => {
       this.setState ({
         loggedInStatus: "NOT_LOGGED_IN",
@@ -104,22 +88,17 @@ export default class SettingsScreen extends React.Component {
 
    //  -------------------------------------- My Contacts --------------------------------------
 
-
    MyContactsFunc(userId) {
-     console.log('yo')
     axios.get("https://powerful-sea-75935.herokuapp.com/api/v1/user_id/" + userId, )
     .then(response => { 
       this.setState({
         myContacts: response.data.contacts,
         myContactsCopy: response.data.contacts
       })
-      // console.log("Dashboard - myContactsFunc - Users Contacts", this.state.myContacts)
     })
   }
 
-
  //  -------------------------------------- Toggle --------------------------------------
-
 
   toggleContacts() {
     this.setState({
@@ -148,25 +127,20 @@ export default class SettingsScreen extends React.Component {
   //  -------------------------------------- Display Info --------------------------------------
 
   render() {
-    const { navigation } = this.props;
     const { firstName, lastName, user } = this.state;
 
     return (
       <View style={styles.container}>
-
         <View style={styles.header}>
           <Text style={styles.headerText}> Settings </Text>
-          <Icon style={styles.headerIcon} onPress={() => navigation.navigate('Dashboard')} name="ios-contact" color="#ccc" size={30}/>
+          <IonIcon style={styles.headerIcon} onPress={() => navigation.navigate('Dashboard')} name="ios-contact" color="#ccc" size={30}/>
         </View>
-            {/* <Image style={styles.avatar} source={{uri: 'https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'}}/> */}
+
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-
-          <Text style={styles.bodyLargeText}>{firstName} {lastName}</Text>
-          {/* <Text style={styles.bodySmallText}>{user.username}</Text>   */}
+            <Text style={styles.bodyLargeText}>{firstName} {lastName}</Text>
 
             {/* -------------------------------- View Contacts --------------------------------  */}
-
 
             <Card onPress={() => navigation.navigate('AddContactScreen', {userId: this.state.userId})} >
               <Card.Title 
@@ -183,9 +157,6 @@ export default class SettingsScreen extends React.Component {
                 left={(props) => <Avatar.Icon {...props} icon="account" />} 
               />
             </Card>
-
-            {/* "plus","plus-box","plus-box-outline", "qrcode-scan" "plus-circle","plus-circle-multiple-outline","plus-circle-outline","plus-minus","plus-minus-box" */}
-
 
             <Card onPress={() => navigation.navigate('NewContactScreen', {userId: this.state.userId})} >
               <Card.Title 
@@ -220,7 +191,6 @@ export default class SettingsScreen extends React.Component {
               />
             </Card>
 
-
             <Card onPress={this._logout} >
               <Card.Title 
                 title="Logout" 
@@ -229,30 +199,27 @@ export default class SettingsScreen extends React.Component {
               />
             </Card>
 
-
-
-            
-        
-
             <View style={styles.footer} >
-              <Icon 
-                style={styles.footerContent} 
-                onPress={() => navigation.navigate('Dashboard')} 
-                name="ios-home" 
-                color="#ccc" 
-                size={25}
-              />
-              <Icon 
-                style={styles.footerContent} 
-                onPress={() => navigation.navigate('ContactScreen', {userId: this.state.userId})}
-                name="ios-contacts" color="#ccc" size={25}                 
-              />
-
-              <Icon style={styles.footerContent} onPress={() => navigation.navigate('SearchScreen')} name="ios-search" color="#ccc" size={25}/>
-              <Icon style={styles.footerContent} onPress={this._logout} name="ios-log-out" color="#ccc" size={25}/>
-              {/* <Button mode="outlined" style={styles.footerContent} onPress={this._logout}> LOGOUT </Button>  */}
+              <Footer>
+                <FooterTab>
+                  <Button>
+                      <Icon name='ios-home' onPress={() => this.props.navigation.navigate('Dashboard', {userId: this.state.userId})}/>
+                  </Button>
+                  <Button>
+                      <Icon name='md-contacts' onPress={() => this.props.navigation.navigate('ContactScreen', {userId: this.state.userId})}  />
+                  </Button>
+                  <Button>
+                      <IconFA style={styles.icon} name='plus' onPress={() => this.props.navigation.navigate('AddContactScreen', {userId: this.state.userId})}  />
+                  </Button>
+                  <Button>
+                      <Icon name='md-search' onPress={() => this.props.navigation.navigate('SearchScreen')} />
+                  </Button>
+                  <Button>
+                      <Icon name='md-settings' onPress={() => this.navigation.navigate('SettingsScreen')} />
+                  </Button>
+                </FooterTab>
+              </Footer>
             </View>
-
           </View>
         </View>
       </View>
@@ -260,11 +227,6 @@ export default class SettingsScreen extends React.Component {
     )
   }
 }
-
-
-
-//  -------------------------------------- Styling  --------------------------------------
-
 
 const styles = StyleSheet.create({
   container: {
@@ -375,18 +337,20 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    flex: 1,
-    flexDirection: 'row',
+    // flex: 1,
+    // flexDirection: 'row',
     width: '100%',
-    height: 70,
-    backgroundColor: "white",
-    justifyContent: 'center',
-    // alignItems: 'center',
+    // height: 70,
+    // backgroundColor: "white",
+    // justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute', //Here is the trick
     bottom: 0,
-    alignItems: 'stretch',
-    borderTopColor: '#DFDCEC',
-    borderTopWidth: 1.5,
+    backgroundColor: 'red',
+    // alignItems: 'stretch',
+    // borderTopColor: '#DFDCEC',
+
+    // borderTopWidth: 1.5,
     // padding: 10,
   },
 
@@ -402,10 +366,15 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     alignItems: 'center',
     height: 50,
-  }
+  },
+  icon: {
+    color: "#8510d8",
+    fontSize: 34,
+    height: 35,
+    width: 35,
+    overflow: "visible"
+  },
 
 });
 
 
-
-// export default Dashboard(TabNavigator)

@@ -77,34 +77,6 @@ export default class ContactScreen extends React.Component {
   }
 
 
-  createVCard() {
-    console.log("It Started")
-    
-    let contact = new vCard()
- 
-    //set properties
-    contact.firstName = 'Eric';
-    contact.middleName = 'J';
-    contact.lastName = 'Nesser';
-    contact.organization = 'ACME Corporation';
-    contact.workPhone = '312-555-1212';
-    contact.title = 'Software Developer';
-    contact.url = 'https://github.com/enesser';
-    contact.note = 'Notes on Eric';
-
-    // console.log(contact);
-    contact.version = '3.0';
-    
-    //save to file
-    // const documentPath = rnfs.DocumentDirectoryPath;
-    // contact.saveToFile(`${documentPath}/eric-nesser.vcf`);
-    // contact.saveToFile('./vcf/eric-nesser.vcf');
-    
-    //get as formatted string
-    return console.log(contact.getFormattedString());
-  }
-
-
 
 
 
@@ -127,6 +99,7 @@ export default class ContactScreen extends React.Component {
               <View style={styles.bodyContent}>
                 <View style={styles.nameContainer}>
                 <Text style={styles.name} > {this.state.user.firstname} {this.state.user.lastname}</Text>
+                <Text style={styles.name} > Contact Screen </Text>
                 </View>   
 
                 <ScrollView style={styles.scrollView}>

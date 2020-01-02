@@ -48,21 +48,21 @@ export default class AddPhone extends React.Component {
                 </TouchableOpacity>
 
                     {type === 'Phone' &&
-                        <Input style={styles.input} placeholder='(281)-111-1111' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} keyboardType='number-pad' keyboardAppearance='dark' clearButtonMode='always' placeholder='(281)-111-1111' onChangeText={(contactValue) => this.setState({contactValue})} />
                     || type === 'Work Phone' &&
-                        <Input style={styles.input} placeholder='(281)-111-1111' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} keyboardType='number-pad' keyboardAppearance='dark' clearButtonMode='always' placeholder='(281)-111-1111' onChangeText={(contactValue) => this.setState({contactValue})} />
                     || type === 'Home Phone' &&
-                        <Input style={styles.input} placeholder='(281)-111-1111' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} keyboardType='number-pad' keyboardAppearance='dark' clearButtonMode='always' placeholder='(281)-111-1111' onChangeText={(contactValue) => this.setState({contactValue})} />
                     || type === 'Email' &&
-                        <Input style={styles.input} placeholder='example@gmail.com' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} keyboardType='email-address' keyboardAppearance='dark' clearButtonMode='always' placeholder='example@gmail.com' returnKeyType='done' autoCapitalize = "none" onChangeText={(contactValue) => this.setState({contactValue})} />
                     || type === 'Work Email' &&
-                        <Input style={styles.input} placeholder='example@gmail.com' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} keyboardType='email-address' keyboardAppearance='dark' clearButtonMode='always' placeholder='example@gmail.com' autoCapitalize = "none" onChangeText={(contactValue) => this.setState({contactValue})} />
                     || type === 'Website' &&
-                        <Input style={styles.input} placeholder='www.example.com' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} keyboardType='url' keyboardAppearance='dark' clearButtonMode='always' placeholder='www.example.com' autoCapitalize = "none" onChangeText={(contactValue) => this.setState({contactValue})} />
                     || type === 'Organization' &&
-                        <Input style={styles.input} placeholder='Google' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} placeholder='Google' keyboardAppearance='dark' clearButtonMode='always' onChangeText={(contactValue) => this.setState({contactValue})} />
                     || type === 'Title' &&
-                        <Input style={styles.input} placeholder='Developer' onChangeText={(contactValue) => this.setState({contactValue})} />
+                        <Input style={styles.input} placeholder='Developer' keyboardAppearance='dark' clearButtonMode='always' onChangeText={(contactValue) => this.setState({contactValue})} />
         
                     }
                 

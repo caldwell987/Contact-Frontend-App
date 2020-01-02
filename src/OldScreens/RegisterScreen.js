@@ -73,7 +73,7 @@ class RegisterScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     let yo = this.state.username.toLowerCase()
-    console.log('line 77', yo)
+    // console.log('line 77', yo)
 
       return (
         <Background>
